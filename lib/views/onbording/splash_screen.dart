@@ -98,9 +98,9 @@ class _SplashScreenState extends State<SplashScreen>
                 children: [
                   // Logo eCare+
                   Image.asset(
-                    'assets/images/logo_ecare.png',
-                    width: 160,
-                    height: 160,
+                    'assets/images/ecare_logo.png',
+                    width: 240,
+                    height: 240,
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 12),

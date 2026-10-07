@@ -8,14 +8,12 @@ import '../../widgets/primary_button.dart';
 class _OnboardingData {
   final String title;
   final String subtitle;
-  final IconData icon;
-  final Color iconBg;
+  final String imagePath;
 
   const _OnboardingData({
     required this.title,
     required this.subtitle,
-    required this.icon,
-    required this.iconBg,
+    required this.imagePath,
   });
 }
 
@@ -39,23 +37,20 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     _OnboardingData(
       title: 'Maîtrisez votre\nparcours de soin',
       subtitle:
-          'Suivez l\'évolution de vos symptômes et de vos constantes vitales en temps réel.',
-      icon: Icons.monitor_heart_rounded,
-      iconBg: Color(0xFFE0F3FF),
+          'Suivez l\'évolution de vos symptômes, de vos constantes vitales et de votre traitement en temps réel.',
+      imagePath: 'assets/images/ecareImage1.png',
     ),
     _OnboardingData(
       title: 'Votre allié 24h/24\net 7j/7',
       subtitle:
           'Une question ? Un doute ? Discutez instantanément avec votre médecin spécialisé.',
-      icon: Icons.support_agent_rounded,
-      iconBg: Color(0xFFE8F5FF),
+      imagePath: 'assets/images/ecareImage2.png',
     ),
     _OnboardingData(
-      title: 'Reprenez le pouvoir\nsur votre santé',
+      title: '  Reprenez le pouvoir\nsur votre santé',
       subtitle:
           'Grâce à l\'accompagnement intelligent d\'eCARE+, votre traitement devient simple et personnalisé.',
-      icon: Icons.favorite_rounded,
-      iconBg: Color(0xFFD9F0FF),
+      imagePath: 'assets/images/ecareImage3.png',
     ),
   ];
 
@@ -211,35 +206,23 @@ class _OnboardingPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Illustration (icône grande dans un cercle coloré)
+              // Illustration (Image PNG ecareImage1..5)
               LayoutBuilder(
                 builder: (context, constraints) {
-                  // Taille adaptative : max 220 pour éviter l'overflow
-                  final double outerSize =
-                      (screenSize.width * 0.52).clamp(160.0, 220.0);
-                  final double innerSize = outerSize * 0.58;
-                  final double iconSize = outerSize * 0.32;
-                  return Container(
-                    width: outerSize,
-                    height: outerSize,
-                    decoration: BoxDecoration(
-                      color: data.iconBg,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: innerSize,
-                        height: innerSize,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withAlpha(20),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          data.icon,
-                          size: iconSize,
+                  final double imageHeight =
+                      (screenSize.height * 0.35).clamp(180.0, 260.0);
+                  return SizedBox(
+                    height: imageHeight,
+                    child: Image.asset(
+                      data.imagePath,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.image_not_supported_rounded,
+                          size: 80,
                           color: AppColors.primary,
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   );
                 },
