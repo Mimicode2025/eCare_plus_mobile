@@ -1,22 +1,104 @@
-# ecare_plus_mobile
+# eCare+
 
-A new Flutter project.
+**eCare+** est une application mobile de suivi et d'accompagnement des patients atteints de maladies chroniques, notamment le diabète et l'hypertension artérielle.
 
-## Getting Started
+L'application permet aux patients de suivre leurs constantes de santé, consulter leur historique et leurs statistiques, recevoir des rappels et accéder à des contenus éducatifs afin de mieux gérer leur santé au quotidien.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Objectifs du projet
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+eCare+ a pour objectif de faciliter le suivi quotidien des patients chroniques grâce à une solution mobile simple, accessible et centralisée.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+L'application vise notamment à :
 
-Architecture.
+* Faciliter l'enregistrement et le suivi de la glycémie ;
+* Permettre le suivi de la tension artérielle ;
+* Présenter l'évolution des mesures sous forme de statistiques et de graphiques ;
+* Gérer des rappels pour les prises de médicaments et les mesures ;
+* Fournir des contenus éducatifs sur le diabète et l'hypertension ;
+* Envoyer des notifications et rappels ;
+* Gérer le profil et les informations du patient ;
+* Faciliter le suivi et l'accompagnement médical du patient.
 
+---
+
+## Fonctionnalités principales
+
+### Authentification
+
+* Inscription ;
+* Connexion ;
+* Déconnexion ;
+* Réinitialisation du mot de passe ;
+* Gestion du profil utilisateur.
+
+### Suivi de la glycémie
+
+L'utilisateur peut :
+
+* Enregistrer une mesure de glycémie ;
+* Consulter son historique ;
+* Visualiser l'évolution de sa glycémie ;
+* Identifier les valeurs normales, basses ou élevées.
+
+### Suivi de la tension artérielle
+
+L'application permet d'enregistrer :
+
+* La pression systolique ;
+* La pression diastolique ;
+* Le pouls ;
+* La date et l'heure de la mesure.
+
+Les données peuvent ensuite être consultées dans l'historique et les statistiques.
+
+### Statistiques
+
+eCare+ permet de visualiser les données de santé sous forme de :
+
+* Graphiques ;
+* Statistiques quotidiennes ;
+* Statistiques hebdomadaires ;
+* Statistiques mensuelles ;
+* Historique des mesures.
+
+### Rappels
+
+L'utilisateur peut programmer des rappels pour :
+
+* Les médicaments ;
+* Les mesures de glycémie ;
+* Les mesures de tension ;
+* Les rendez-vous médicaux.
+
+### Éducation sanitaire
+
+L'application propose des contenus éducatifs permettant aux utilisateurs de mieux comprendre :
+
+* Le diabète ;
+* L'hypertension ;
+* L'alimentation ;
+* L'activité physique ;
+* La prévention des complications ;
+* Les bonnes pratiques de suivi.
+
+### Notifications
+
+Les notifications permettent notamment de rappeler à l'utilisateur :
+
+* Une mesure à effectuer ;
+* La prise d'un médicament ;
+* Un rendez-vous ;
+* Un nouveau contenu éducatif.
+
+---
+
+# Architecture du projet
+
+Le projet utilise une architecture **Model – View – Service**, permettant de séparer clairement les données, l'interface utilisateur et la logique métier.
+
+```text
 lib/
 │
 ├── main.dart
@@ -34,7 +116,7 @@ lib/
 │   │
 │   ├── auth/
 │   │   ├── login_page.dart
-│   │   ├── register_page.dart 36BFFA
+│   │   ├── register_page.dart
 │   │   └── forgot_password_page.dart
 │   │
 │   ├── dashboard/
@@ -84,3 +166,208 @@ lib/
 │
 └── routes/
     └── app_routes.dart
+```
+
+## Description des dossiers
+
+| Dossier     | Description                                                    |
+| ----------- | -------------------------------------------------------------- |
+| `models/`   | Contient les modèles représentant les données de l'application |
+| `views/`    | Contient les différentes interfaces et pages de l'application  |
+| `services/` | Contient la logique métier et la communication avec l'API      |
+| `widgets/`  | Contient les composants réutilisables de l'interface           |
+| `utils/`    | Contient les constantes, validateurs et fonctions utilitaires  |
+| `routes/`   | Centralise la navigation entre les différentes pages           |
+| `main.dart` | Point d'entrée de l'application Flutter                        |
+
+---
+
+# Technologies utilisées
+
+## Application mobile
+
+* Flutter
+* Dart
+
+## Base de données
+
+* PostgreSQL
+
+PostgreSQL est utilisé pour stocker les données utilisateurs, patients, mesures de glycémie, mesures de tension, rendez-vous, rappels, notifications et contenus éducatifs.
+
+## Communication avec le backend
+
+* API REST
+* HTTP / HTTPS
+* JSON
+
+## Architecture
+
+* Model – View – Service
+* Séparation des responsabilités
+* Composants Flutter réutilisables
+
+## Outils de développement
+
+* Git
+* GitHub
+* Visual Studio Code
+* Android Studio
+* Postman
+
+---
+
+# Dépendances Flutter
+
+Les principales dépendances utilisées ou prévues dans le projet sont notamment :
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^1.0.0
+  provider: ^6.0.0
+  flex_color_scheme: ^8.0.0
+```
+
+Les versions exactes des packages peuvent être consultées dans le fichier `pubspec.yaml`.
+
+---
+
+# Installation du projet
+
+## 1. Cloner le projet
+
+```bash
+git clone https://github.com/VOTRE_USERNAME/ecare_plus_mobile.git
+```
+
+Puis :
+
+```bash
+cd ecare_plus_mobile
+```
+
+## 2. Installer les dépendances
+
+```bash
+flutter pub get
+```
+
+## 3. Vérifier l'environnement Flutter
+
+```bash
+flutter doctor
+```
+
+## 4. Lancer l'application
+
+Pour lancer l'application sur un appareil connecté ou un émulateur :
+
+```bash
+flutter run
+```
+
+---
+
+# Configuration de la base de données
+
+Le projet utilise PostgreSQL.
+
+La base de données doit être configurée côté backend avec les informations suivantes :
+
+```text
+Database: ecare_plus
+Host: localhost
+Port: 5432
+Username: votre_utilisateur
+Password: votre_mot_de_passe
+```
+
+Ne jamais placer les identifiants réels de la base de données directement dans le dépôt GitHub.
+
+Les informations sensibles doivent être stockées dans des variables d'environnement ou dans une configuration sécurisée.
+
+---
+
+# Communication avec l'API
+
+L'application Flutter communique avec le serveur via une API REST.
+
+```text
+Flutter Application
+       |
+       | HTTP / HTTPS
+       v
+    REST API
+       |
+       v
+   PostgreSQL
+```
+
+Cette organisation permet de séparer :
+
+* L'application mobile ;
+* Le serveur et l'API ;
+* La base de données.
+
+---
+
+# Sécurité
+
+La sécurité constitue un élément important du projet.
+
+Les mesures prévues comprennent notamment :
+
+* Authentification des utilisateurs ;
+* Validation des données ;
+* Communication sécurisée avec l'API via HTTPS ;
+* Protection des données personnelles ;
+* Gestion des sessions ;
+* Contrôle des accès ;
+* Protection des informations médicales.
+
+---
+
+# Structure générale
+
+```text
+eCare+
+│
+├── Application Flutter
+│   ├── Models
+│   ├── Views
+│   ├── Services
+│   ├── Widgets
+│   ├── Utils
+│   └── Routes
+│
+├── API REST
+│
+└── PostgreSQL
+```
+
+---
+
+# Équipe
+
+**Projet : eCare+**
+
+Application développée dans le cadre d'un projet visant à proposer une solution numérique pour améliorer le suivi des patients atteints de maladies chroniques.
+
+---
+
+# Statut du projet
+
+**Projet en cours de développement**
+
+Les fonctionnalités et l'architecture peuvent évoluer au fur et à mesure de l'avancement du projet.
+
+---
+
+# Licence
+
+Ce projet est développé dans un cadre académique et de compétition.
+
+Toute utilisation, modification ou distribution du projet doit respecter les conditions définies par l'équipe eCare+.
