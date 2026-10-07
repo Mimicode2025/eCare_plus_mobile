@@ -1,32 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'utils/app_colors.dart';
+import 'routes/app_routes.dart';
+
+// Views — Onboarding
+import 'views/onbording/splash_screen.dart';
+import 'views/onbording/onboarding_screen.dart';
+
+// Views — Auth
+import 'views/auth/login_page.dart';
+import 'views/auth/register_page.dart';
+import 'views/auth/forgot_password_page.dart';
+import 'views/auth/registration_success_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ECarePlusApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ECarePlusApp extends StatelessWidget {
+  const ECarePlusApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      home: const Home(),
-      routes: <String, WidgetBuilder>{
-        OnbordingPageOne.routeName: (BuildContext context) => const OnbordingPageOne(),
-        AjoutComptePage.routeName: (BuildContext context) =>
-            const AjoutComptePage(),
-        ClavierPage.routeName: (BuildContext context) => const ClavierPage(),
-        AppelPage.routeName: (BuildContext context) => const AppelPage(),
-        ContactPage.routeName: (BuildContext context) => const ContactPage(),
-        AdministrateurPage.routeName: (BuildContext context) =>
-            const AdministrateurPage(),
+      title: 'eCARE+',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          secondary: AppColors.primaryLight,
+          surface: AppColors.scaffoldBackground,
+        ),
+        scaffoldBackgroundColor: AppColors.scaffoldBackground,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        useMaterial3: true,
+      ),
+      initialRoute: AppRoutes.splash,
+      routes: {
+        AppRoutes.splash: (_) => const SplashScreen(),
+        AppRoutes.onboarding: (_) => const OnboardingScreen(),
+        AppRoutes.login: (_) => const LoginPage(),
+        AppRoutes.register: (_) => const RegisterPage(),
+        AppRoutes.forgotPassword: (_) => const ForgotPasswordPage(),
+        AppRoutes.registrationSuccess: (_) => const RegistrationSuccessPage(),
       },
     );
   }
