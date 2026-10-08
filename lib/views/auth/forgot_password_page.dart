@@ -70,13 +70,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 child: Column(
                   key: const ValueKey('form'),
                   children: [
-                    const _RoundIcon(
-                        icon: Icons.lock_reset_rounded,
-                        color: AppColors.primary,
-                        bg: Color(0xFFE8F1FD)),
+                    Image.asset(
+                      'assets/images/ecareImage4.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
                     const SizedBox(height: 18),
                     Text(
-                      'Entrez votre adresse e-mail. Nous vous enverrons les instructions pour modifier votre mot de passe.',
+                      'Entrez votre Email. Nous vous enverrons un code pour modifier votre mot de passe.',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.body.copyWith(
                           fontSize: 14,
