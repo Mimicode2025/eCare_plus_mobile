@@ -14,4 +14,11 @@ class AppRoutes {
   // Dashboard
   static const String home = '/home';
   static const String profile = '/profile';
+  static const String appointments = '/appointments';
+  static const String notifications = '/notifications';
+  static const String followUp = '/follow-up';
+  static const String documents = '/documents';
+  static const String treatments = '/treatments';
+  static const String doctors = '/doctors';
+  static const String statistics = '/statistics';
 }

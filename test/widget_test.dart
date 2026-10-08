@@ -26,7 +26,7 @@ void main() {
     Navigator.of(context).pushReplacementNamed('/home');
     await tester.pumpAndSettle();
     expect(find.byType(HomePage), findsOneWidget);
-    expect(find.text('Mes médecins'), findsOneWidget);
+    expect(find.text('Bienvenue'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.tap(find.byType(CircleAvatar).first);
     await tester.pumpAndSettle();
