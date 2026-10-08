@@ -167,7 +167,7 @@ class _OtpBoxes extends StatelessWidget {
       onTap: focus.requestFocus,
       child: AnimatedBuilder(
         animation: Listenable.merge([controller, focus]),
-        builder: (_, __) {
+        builder: (_, _) {
           final text = controller.text;
           final active = text.length.clamp(0, length - 1);
           return SizedBox(

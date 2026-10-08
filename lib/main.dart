@@ -12,6 +12,8 @@ import 'views/auth/login_page.dart';
 import 'views/auth/register_page.dart';
 import 'views/auth/forgot_password_page.dart';
 import 'views/auth/registration_success_page.dart';
+import 'views/dashbord/home_page.dart';
+import 'views/profile/profile_page.dart';
 
 void main() {
   runApp(const ECarePlusApp());
@@ -44,6 +46,8 @@ class ECarePlusApp extends StatelessWidget {
         AppRoutes.register: (_) => const RegisterPage(),
         AppRoutes.forgotPassword: (_) => const ForgotPasswordPage(),
         AppRoutes.registrationSuccess: (_) => const RegistrationSuccessPage(),
+        AppRoutes.home: (_) => const Scaffold(body: HomePage()),
+        AppRoutes.profile: (_) => const ProfilePage(firstTime: true),
       },
     );
   }

@@ -67,7 +67,7 @@ class _AuthHeaderState extends State<AuthHeader>
             Positioned.fill(
               child: AnimatedBuilder(
                 animation: _pulse,
-                builder: (_, __) => CustomPaint(
+                builder: (_, _) => CustomPaint(
                   painter: _EcgPainter(
                     Curves.easeInOut.transform(_pulse.value),
                     widget.height - 92,
