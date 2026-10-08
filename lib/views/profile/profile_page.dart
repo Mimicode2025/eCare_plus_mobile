@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import '../../models/care_data.dart';
+import '../../services/profile_photo_service.dart';
+import '../../widgets/patient_avatar.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/gradient_button.dart';
 import '../../routes/app_routes.dart';
+import '../../widgets/page_header.dart';
 
 class ProfilePage extends StatefulWidget {
   /// true = première connexion : après "Enregistrer" on va au dashboard.
   final bool firstTime;
-  const ProfilePage({super.key, this.firstTime = false});
+  final ImagePicker? imagePicker;
+  const ProfilePage({super.key, this.firstTime = false, this.imagePicker});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -22,6 +30,45 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _sexe;
   String? _groupe;
   bool _loading = false;
+  bool _pickingPhoto = false;
+
+  Future<void> _choosePhoto() async {
+    if (_pickingPhoto) return;
+    FocusScope.of(context).unfocus();
+    setState(() => _pickingPhoto = true);
+    try {
+      final image = await (widget.imagePicker ?? ImagePicker()).pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+        requestFullMetadata: false,
+      );
+      if (image == null || !mounted) return;
+      final bytes = await ProfilePhotoService.readPhoto(image);
+      if (!mounted) return;
+      context.read<CareData>().setProfilePhoto(bytes);
+    } catch (error) {
+      if (!mounted) return;
+      final denied =
+          error is PlatformException &&
+          (error.code == 'photo_access_denied' ||
+              error.code == 'photo_access_restricted');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            denied
+                ? 'Autorisez l’accès aux photos dans les paramètres du téléphone.'
+                : error is FormatException
+                ? 'Cette photo est trop volumineuse. Choisissez une image de moins de 10 Mo.'
+                : 'Impossible d’importer cette photo. Essayez une autre image.',
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _pickingPhoto = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -56,53 +103,18 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: AppColors.scaffoldBackground,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                Row(
-                  children: [
-                    if (!widget.firstTime)
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          width: 42,
-                          height: 42,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: AppDecor.shadow(),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_rounded,
-                            color: AppColors.textDark,
-                          ),
-                        ),
-                      )
-                    else
-                      const SizedBox(width: 42),
-                    Expanded(
-                      child: Text(
-                        'Votre profil',
-                        textAlign: TextAlign.center,
-                        style: AppDecor.t(
-                          20,
-                          w: FontWeight.w700,
-                          c: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 42),
-                  ],
+                PageHeader(
+                  title: 'Votre profil',
+                  subtitle: 'Vos informations personnelles et médicales.',
+                  showBack: !widget.firstTime,
                 ),
-                const SizedBox(height: 22),
-                _Avatar(
-                  onAdd: () {
-                    // TODO: image_picker
-                  },
-                ),
+                const SizedBox(height: 26),
+                _Avatar(onAdd: _choosePhoto, loading: _pickingPhoto),
                 const SizedBox(height: 28),
                 _Label('Nom'),
                 _input(_nom, 'Votre nom', validator: _required),
@@ -243,7 +255,8 @@ class _Label extends StatelessWidget {
 
 class _Avatar extends StatelessWidget {
   final VoidCallback onAdd;
-  const _Avatar({required this.onAdd});
+  final bool loading;
+  const _Avatar({required this.onAdd, required this.loading});
 
   @override
   Widget build(BuildContext context) {
@@ -255,37 +268,32 @@ class _Avatar extends StatelessWidget {
             gradient: AppDecor.gradient,
             shape: BoxShape.circle,
           ),
-          child: const CircleAvatar(
-            radius: 58,
-            backgroundColor: AppColors.primaryLighter,
-            backgroundImage: AssetImage('lib/data/Profile.png'),
-            onBackgroundImageError: _ignore,
-          ),
+          child: const PatientAvatar(radius: 58),
         ),
         Positioned(
           right: 2,
           bottom: 6,
-          child: GestureDetector(
-            onTap: onAdd,
-            child: Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 3),
-              ),
-              child: const Icon(
-                Icons.add_rounded,
-                color: Colors.white,
-                size: 19,
-              ),
+          child: IconButton.filled(
+            tooltip: 'Choisir une photo',
+            onPressed: loading ? null : onAdd,
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              minimumSize: const Size(48, 48),
+              side: const BorderSide(color: Colors.white, width: 3),
             ),
+            icon: loading
+                ? const SizedBox(
+                    width: 19,
+                    height: 19,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(Icons.add_rounded, color: Colors.white, size: 19),
           ),
         ),
       ],
     );
   }
 }
-
-void _ignore(Object e, StackTrace? s) {}

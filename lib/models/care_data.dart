@@ -45,6 +45,13 @@ class CareData extends ChangeNotifier {
   final List<GlucoseReading> _readings = [];
   final List<BloodPressureReading> _bloodPressureReadings = [];
   bool remindersEnabled = true;
+  Uint8List? _profilePhoto;
+  Uint8List? get profilePhoto => _profilePhoto;
+
+  void setProfilePhoto(Uint8List bytes) {
+    _profilePhoto = Uint8List.fromList(bytes).asUnmodifiableView();
+    notifyListeners();
+  }
 
   List<CareNotification> get notifications {
     final items = [
@@ -110,6 +117,7 @@ class CareData extends ChangeNotifier {
   }
 
   void clear() {
+    _profilePhoto = null;
     _appointments.clear();
     _notifications.clear();
     _readings.clear();

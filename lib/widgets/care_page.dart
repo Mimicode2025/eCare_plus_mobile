@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_decor.dart';
+import 'page_header.dart';
 
 class CarePage extends StatelessWidget {
   final String title;
@@ -27,19 +28,10 @@ class CarePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (showBack && Navigator.canPop(context)) ...[
-                  IconButton.filledTonal(
-                    tooltip: 'Retour',
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-                Text(title, style: AppDecor.t(25, w: FontWeight.w700)),
-                const SizedBox(height: 8),
-                Text(
-                  subtitle,
-                  style: AppDecor.t(13, c: AppColors.textMuted, h: 1.6),
+                PageHeader(
+                  title: title,
+                  subtitle: subtitle,
+                  showBack: showBack,
                 ),
                 const SizedBox(height: 26),
                 child,

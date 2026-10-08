@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/care_data.dart';
+import 'services/profile_photo_service.dart';
 import 'widgets/main_shell.dart';
 import 'utils/app_colors.dart';
 import 'routes/app_routes.dart';
@@ -24,17 +25,22 @@ import 'views/measurement/follow_up_page.dart';
 import 'views/error/page_not_found_page.dart';
 import 'views/error/no_connection_page.dart';
 
-void main() {
-  runApp(const ECarePlusApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final data = CareData();
+  final photo = await ProfilePhotoService.recoverPhoto();
+  if (photo != null) data.setProfilePhoto(photo);
+  runApp(ECarePlusApp(initialData: data));
 }
 
 class ECarePlusApp extends StatelessWidget {
-  const ECarePlusApp({super.key});
+  final CareData? initialData;
+  const ECarePlusApp({super.key, this.initialData});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => CareData(),
+      create: (_) => initialData ?? CareData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'eCARE+',

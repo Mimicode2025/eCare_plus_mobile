@@ -2,6 +2,7 @@ import 'dart:ui' show PathMetric;
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_text_styles.dart';
+import 'page_header.dart';
 
 /// En-tête signature d'eCare+ : dégradé profond, bord en vague et
 /// un battement de cœur (ECG) qui se dessine à l'ouverture de la page.
@@ -54,16 +55,8 @@ class _AuthHeaderState extends State<AuthHeader>
         ),
         child: Stack(
           children: [
-            Positioned(
-              top: -70,
-              right: -50,
-              child: _Orb(size: 220, alpha: 22),
-            ),
-            Positioned(
-              top: 90,
-              left: -80,
-              child: _Orb(size: 170, alpha: 14),
-            ),
+            Positioned(top: -70, right: -50, child: _Orb(size: 220, alpha: 22)),
+            Positioned(top: 90, left: -80, child: _Orb(size: 170, alpha: 14)),
             Positioned.fill(
               child: AnimatedBuilder(
                 animation: _pulse,
@@ -84,30 +77,22 @@ class _AuthHeaderState extends State<AuthHeader>
                     Row(
                       children: [
                         if (widget.showBack) ...[
-                          _GlassButton(onTap: () => Navigator.pop(context)),
+                          PageBackButton(
+                            color: Colors.white,
+                            backgroundColor: Colors.white.withAlpha(45),
+                          ),
                           const SizedBox(width: 12),
                         ],
                         const _LogoMark(),
                       ],
                     ),
                     const SizedBox(height: 22),
-                    Text(
-                      widget.title,
-                      style: AppTextStyles.heading1.copyWith(
-                        color: Colors.white,
-                        fontSize: 30,
-                        height: 1.1,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.subtitle,
-                      style: AppTextStyles.body.copyWith(
-                        color: Colors.white.withAlpha(215),
-                        fontSize: 14.5,
-                        height: 1.4,
-                      ),
+                    PageHeader(
+                      title: widget.title,
+                      subtitle: widget.subtitle,
+                      showBack: false,
+                      titleColor: Colors.white,
+                      subtitleColor: Colors.white.withAlpha(215),
                     ),
                   ],
                 ),
@@ -127,13 +112,13 @@ class _Orb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white.withAlpha(alpha),
-        ),
-      );
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.white.withAlpha(alpha),
+    ),
+  );
 }
 
 class _LogoMark extends StatelessWidget {
@@ -150,8 +135,11 @@ class _LogoMark extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.favorite_rounded,
-              color: AppColors.primary, size: 22),
+          child: const Icon(
+            Icons.favorite_rounded,
+            color: AppColors.primary,
+            size: 22,
+          ),
         ),
         const SizedBox(width: 10),
         Text(
@@ -163,34 +151,6 @@ class _LogoMark extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _GlassButton extends StatelessWidget {
-  final VoidCallback onTap;
-  const _GlassButton({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Retour',
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            color: Colors.white.withAlpha(45),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withAlpha(70)),
-          ),
-          child: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: Colors.white, size: 16),
-        ),
-      ),
     );
   }
 }

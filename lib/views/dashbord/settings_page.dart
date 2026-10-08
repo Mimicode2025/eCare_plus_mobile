@@ -6,6 +6,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
 import '../profile/profile_page.dart';
+import '../../widgets/patient_avatar.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -281,11 +282,7 @@ class _ProfileBanner extends StatelessWidget {
                           width: 2,
                         ),
                       ),
-                      child: const CircleAvatar(
-                        radius: 27,
-                        backgroundColor: AppColors.primaryLighter,
-                        backgroundImage: AssetImage('lib/data/Profile.png'),
-                      ),
+                      child: const PatientAvatar(radius: 27),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -361,10 +358,7 @@ class _ProfileBanner extends StatelessWidget {
 
 class _SectionHeading extends StatelessWidget {
   final String title, subtitle;
-  const _SectionHeading({
-    required this.title,
-    required this.subtitle,
-  });
+  const _SectionHeading({required this.title, required this.subtitle});
   @override
   Widget build(BuildContext context) => Row(
     crossAxisAlignment: CrossAxisAlignment.start,

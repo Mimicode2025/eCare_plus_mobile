@@ -5,6 +5,7 @@ import '../../models/care_data.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
+import '../../widgets/page_header.dart';
 import '../../widgets/gradient_button.dart';
 import '../../widgets/measurement_chart.dart';
 
@@ -53,228 +54,221 @@ class _FollowUpPageState extends State<FollowUpPage> {
           ..sort((a, b) => a.date.compareTo(b.date));
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
-      appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBackground,
-        surfaceTintColor: Colors.transparent,
-        centerTitle: true,
-        toolbarHeight: 72,
-        title: Text(
-          'Mon suivi',
-          style: AppDecor.t(22, w: FontWeight.w700, c: AppColors.primary),
-        ),
-        leading: Navigator.canPop(context)
-            ? IconButton(
-                tooltip: 'Retour',
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_rounded),
-              )
-            : null,
-      ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 680),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(30),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+              children: [
+                const PageHeader(
+                  title: 'Mon suivi',
+                  subtitle:
+                      'Vos constantes et leur évolution, au même endroit.',
                 ),
-                child: Row(
-                  children: [
-                    _tab('Glycémie', false),
-                    _tab('Tension artérielle', true),
-                  ],
+                const SizedBox(height: 26),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    children: [
+                      _tab('Glycémie', false),
+                      _tab('Tension artérielle', true),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 22),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < 4; i++)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ChoiceChip(
-                          label: Text(
-                            ['7 jours', '30 jours', '3 mois', '6 mois'][i],
+                const SizedBox(height: 22),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < 4; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ChoiceChip(
+                            label: Text(
+                              ['7 jours', '30 jours', '3 mois', '6 mois'][i],
+                            ),
+                            selected: _period == i,
+                            selectedColor: AppColors.primary,
+                            labelStyle: AppDecor.t(
+                              12,
+                              w: FontWeight.w600,
+                              c: _period == i
+                                  ? Colors.white
+                                  : AppColors.primary,
+                            ),
+                            showCheckmark: false,
+                            onSelected: (_) => setState(() => _period = i),
                           ),
-                          selected: _period == i,
-                          selectedColor: AppColors.primary,
-                          labelStyle: AppDecor.t(
-                            12,
-                            w: FontWeight.w600,
-                            c: _period == i ? Colors.white : AppColors.primary,
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CareCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _pressure
+                                      ? 'Évolution de la tension'
+                                      : 'Évolution de la glycémie',
+                                  style: AppDecor.t(16, w: FontWeight.w600),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '${points.length} ${points.length == 1 ? 'mesure' : 'mesures'} sur la période',
+                                  style: AppDecor.t(11, c: AppColors.textMuted),
+                                ),
+                              ],
+                            ),
                           ),
-                          showCheckmark: false,
-                          onSelected: (_) => setState(() => _period = i),
+                          const SizedBox(width: 8),
+                          IconButton.filled(
+                            tooltip: 'Ajouter une mesure',
+                            style: IconButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: _addMeasurement,
+                            icon: const Icon(Icons.add_rounded),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 22),
+                      MeasurementChart(
+                        key: const ValueKey('measurement-chart'),
+                        points: points,
+                        start: start,
+                        end: now,
+                        pressure: _pressure,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CareCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Répartition des mesures',
+                        style: AppDecor.t(
+                          17,
+                          w: FontWeight.w700,
+                          c: AppColors.primary,
                         ),
                       ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              CareCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _pressure
-                                    ? 'Évolution de la tension'
-                                    : 'Évolution de la glycémie',
-                                style: AppDecor.t(16, w: FontWeight.w600),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                '${points.length} ${points.length == 1 ? 'mesure' : 'mesures'} sur la période',
-                                style: AppDecor.t(11, c: AppColors.textMuted),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        IconButton.filled(
-                          tooltip: 'Ajouter une mesure',
-                          style: IconButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: _addMeasurement,
-                          icon: const Icon(Icons.add_rounded),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 22),
-                    MeasurementChart(
-                      key: const ValueKey('measurement-chart'),
-                      points: points,
-                      start: start,
-                      end: now,
-                      pressure: _pressure,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              CareCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Répartition des mesures',
-                      style: AppDecor.t(
-                        17,
-                        w: FontWeight.w700,
-                        c: AppColors.primary,
+                      const SizedBox(height: 6),
+                      Text(
+                        'Par moment de la journée',
+                        style: AppDecor.t(11, c: AppColors.textMuted),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Par moment de la journée',
-                      style: AppDecor.t(11, c: AppColors.textMuted),
-                    ),
-                    const SizedBox(height: 18),
-                    MeasurementDistribution(
-                      dates: points.map((point) => point.date).toList(),
-                    ),
-                  ],
+                      const SizedBox(height: 18),
+                      MeasurementDistribution(
+                        dates: points.map((point) => point.date).toList(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 18),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 18),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLight,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'lib/data/Icon_bon a savoir.png',
+                        width: 48,
+                        height: 54,
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true,
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bon à savoir',
+                              style: AppDecor.t(
+                                14,
+                                w: FontWeight.w700,
+                                c: const Color(0xFF315D85),
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Le bouton + permet d’ajouter une constante avec sa date. Les courbes suivent les mesures de la période choisie.',
+                              style: AppDecor.t(
+                                12,
+                                c: const Color(0xFF315D85),
+                                h: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'lib/data/Icon_bon a savoir.png',
-                      width: 48,
-                      height: 54,
-                      fit: BoxFit.contain,
-                      excludeFromSemantics: true,
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
+                const SizedBox(height: 12),
+                if (points.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'Historique de la période',
+                    style: AppDecor.t(16, w: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 14),
+                  for (final point in points.reversed) ...[
+                    CareCard(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Bon à savoir',
-                            style: AppDecor.t(
-                              14,
-                              w: FontWeight.w700,
-                              c: const Color(0xFF315D85),
-                            ),
+                            '${careDate(point.date)} · ${careTime(point.date)}',
+                            style: AppDecor.t(11, c: AppColors.textMuted),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           Text(
-                            'Le bouton + permet d’ajouter une constante avec sa date. Les courbes suivent les mesures de la période choisie.',
+                            _pressure
+                                ? '${point.primary} / ${point.secondary} mmHg'
+                                : '${point.primary} mg/dL',
                             style: AppDecor.t(
-                              12,
-                              c: const Color(0xFF315D85),
-                              h: 1.5,
+                              15,
+                              w: FontWeight.w700,
+                              c: AppColors.primary,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    const SizedBox(height: 12),
                   ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (points.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  'Historique de la période',
-                  style: AppDecor.t(16, w: FontWeight.w700),
-                ),
-                const SizedBox(height: 14),
-                for (final point in points.reversed) ...[
-                  CareCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${careDate(point.date)} · ${careTime(point.date)}',
-                          style: AppDecor.t(11, c: AppColors.textMuted),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          _pressure
-                              ? '${point.primary} / ${point.secondary} mmHg'
-                              : '${point.primary} mg/dL',
-                          style: AppDecor.t(
-                            15,
-                            w: FontWeight.w700,
-                            c: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                 ],
+                const SizedBox(height: 10),
+                Text(
+                  'Mesures conservées pendant cette session.',
+                  textAlign: TextAlign.center,
+                  style: AppDecor.t(10, c: AppColors.textMuted),
+                ),
               ],
-              const SizedBox(height: 10),
-              Text(
-                'Mesures conservées pendant cette session.',
-                textAlign: TextAlign.center,
-                style: AppDecor.t(10, c: AppColors.textMuted),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -7,6 +7,8 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../profile/profile_page.dart';
 import 'appointments_page.dart';
+import '../../widgets/page_header.dart';
+import '../../widgets/patient_avatar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -52,7 +54,7 @@ class HomePage extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 680),
             child: ListView(
               key: const PageStorageKey('home-scroll'),
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
               children: [
                 _Header(greeting: _greeting),
                 const SizedBox(height: 24),
@@ -109,66 +111,49 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = context.watch<CareData>();
-    return Row(
-      children: [
-        Semantics(
-          button: true,
-          label: 'Mon profil',
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ProfilePage()),
+    return PageHeader(
+      title: '$greeting Gloria',
+      showBack: false,
+      leading: Semantics(
+        button: true,
+        label: 'Mon profil',
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ProfilePage()),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(3),
+            decoration: const BoxDecoration(
+              gradient: AppDecor.gradient,
+              shape: BoxShape.circle,
             ),
-            child: Container(
-              padding: const EdgeInsets.all(3),
-              decoration: const BoxDecoration(
-                gradient: AppDecor.gradient,
-                shape: BoxShape.circle,
-              ),
-              child: const CircleAvatar(
-                radius: 25,
-                backgroundColor: AppColors.primaryLighter,
-                backgroundImage: AssetImage('lib/data/Profile.png'),
-              ),
-            ),
+            child: const PatientAvatar(radius: 25),
           ),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '$greeting Gloria',
-                style: AppDecor.t(17, w: FontWeight.w700),
-              ),
-            ],
-          ),
+      ),
+      action: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: AppDecor.shadow(.04),
         ),
-        const SizedBox(width: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: AppDecor.shadow(.04),
-          ),
-          child: IconButton(
-            tooltip: 'Notifications',
-            onPressed: () =>
-                Navigator.pushNamed(context, AppRoutes.notifications),
-            icon: Badge(
-              isLabelVisible:
-                  data.remindersEnabled && data.appointments.isNotEmpty,
-              backgroundColor: AppColors.primary,
-              child: const Icon(
-                Icons.notifications_none_rounded,
-                color: AppColors.textDark,
-              ),
+        child: IconButton(
+          tooltip: 'Notifications',
+          onPressed: () =>
+              Navigator.pushNamed(context, AppRoutes.notifications),
+          icon: Badge(
+            isLabelVisible:
+                data.remindersEnabled && data.appointments.isNotEmpty,
+            backgroundColor: AppColors.primary,
+            child: const Icon(
+              Icons.notifications_none_rounded,
+              color: AppColors.textDark,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
