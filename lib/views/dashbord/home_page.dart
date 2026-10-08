@@ -78,10 +78,6 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  'Profils de démonstration',
-                  style: AppDecor.t(11, c: AppColors.textMuted),
-                ),
                 const SizedBox(height: 16),
                 SizedBox(
                   height:

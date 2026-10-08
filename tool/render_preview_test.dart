@@ -84,6 +84,18 @@ void main() {
     await tester.tap(find.text('Rendez-vous').last);
     await tester.pumpAndSettle();
     await capture('rendez-vous-mobile');
+    await tester.tap(find.text('Paramètres').last);
+    await tester.pumpAndSettle();
+    await capture('parametres-mobile');
+    final settingsScroll = find.ancestor(
+      of: find.text('Votre espace, à votre rythme.'),
+      matching: find.byType(SingleChildScrollView),
+    );
+    await tester.drag(settingsScroll, const Offset(0, -570));
+    await tester.pumpAndSettle();
+    await capture('parametres-preferences');
+    await tester.tap(find.text('Rendez-vous').last);
+    await tester.pumpAndSettle();
     await tester.runAsync(() async {
       final context = tester.element(find.byType(MaterialApp));
       await precacheImage(const AssetImage('lib/data/error_404.png'), context);
