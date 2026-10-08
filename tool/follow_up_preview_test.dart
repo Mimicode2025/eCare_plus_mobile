@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:ecare_plus_mobile/models/care_data.dart';
 import 'package:ecare_plus_mobile/utils/app_colors.dart';
 import 'package:ecare_plus_mobile/views/measurement/follow_up_page.dart';
+import 'package:ecare_plus_mobile/views/notification/notifications_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +87,25 @@ void main() {
     await tester.tap(find.text('Tension artérielle'));
     await tester.pumpAndSettle();
     await capture('suivi-tension-exemple');
+    data.addNotification(
+      CareNotification(
+        title: 'Rappel de traitement',
+        message: 'Retrouvez les horaires indiqués dans votre traitement.',
+        date: now,
+        category: NotificationCategory.medication,
+      ),
+    );
+    data.addAppointment(
+      CareAppointment(
+        doctor: 'Dr Johnson Mike',
+        date: now.add(const Duration(days: 1)),
+      ),
+    );
+    Navigator.of(
+      tester.element(find.byType(FollowUpPage)),
+    ).push(MaterialPageRoute<void>(builder: (_) => const NotificationsPage()));
+    await tester.pumpAndSettle();
+    await capture('notifications-exemple');
     expect(tester.takeException(), isNull);
   });
 }

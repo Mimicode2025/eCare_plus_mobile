@@ -397,6 +397,16 @@ class _MeasurementFormState extends State<_MeasurementForm> {
             style: AppDecor.t(20, w: FontWeight.w700),
           ),
           const SizedBox(height: 22),
+          Image.asset(
+            widget.pressure
+                ? 'lib/data/ajout_tension.png'
+                : 'lib/data/ajout_glycemie.png',
+            height: 150,
+            width: 200,
+            fit: BoxFit.contain,
+            excludeFromSemantics: true,
+          ),
+          const SizedBox(height: 22),
           _field(
             _primary,
             widget.pressure ? 'Systolique' : 'Glycémie',

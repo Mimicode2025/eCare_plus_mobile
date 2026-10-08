@@ -75,6 +75,8 @@ flutter:
     - lib/data/icon_medicament.png
     - lib/data/Icon_bon a savoir.png
     - lib/data/Icon_medecin.png
+    - lib/data/ajout_glycemie.png
+    - lib/data/ajout_tension.png
 
   fonts:
     - family: Poppins

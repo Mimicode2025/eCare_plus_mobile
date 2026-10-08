@@ -1,5 +1,20 @@
 import 'package:flutter/foundation.dart';
 
+enum NotificationCategory { medication, appointment, measurement, alert }
+
+class CareNotification {
+  final String title;
+  final String message;
+  final DateTime date;
+  final NotificationCategory category;
+  const CareNotification({
+    required this.title,
+    required this.message,
+    required this.date,
+    required this.category,
+  });
+}
+
 class CareAppointment {
   final String doctor;
   final DateTime date;
@@ -26,9 +41,34 @@ class BloodPressureReading {
 /// Local session data until the patient services are connected.
 class CareData extends ChangeNotifier {
   final List<CareAppointment> _appointments = [];
+  final List<CareNotification> _notifications = [];
   final List<GlucoseReading> _readings = [];
   final List<BloodPressureReading> _bloodPressureReadings = [];
   bool remindersEnabled = true;
+
+  List<CareNotification> get notifications {
+    final items = [
+      ..._notifications.where(
+        (item) =>
+            remindersEnabled ||
+            item.category != NotificationCategory.appointment,
+      ),
+      for (final appointment
+          in remindersEnabled ? _appointments : <CareAppointment>[])
+        CareNotification(
+          title: appointment.doctor,
+          message: 'Rendez-vous dans votre agenda personnel',
+          date: appointment.date,
+          category: NotificationCategory.appointment,
+        ),
+    ]..sort((a, b) => b.date.compareTo(a.date));
+    return List.unmodifiable(items);
+  }
+
+  void addNotification(CareNotification notification) {
+    _notifications.add(notification);
+    notifyListeners();
+  }
 
   List<CareAppointment> get appointments => List.unmodifiable(_appointments);
   List<GlucoseReading> get readings => List.unmodifiable(_readings);
@@ -71,6 +111,7 @@ class CareData extends ChangeNotifier {
 
   void clear() {
     _appointments.clear();
+    _notifications.clear();
     _readings.clear();
     _bloodPressureReadings.clear();
     remindersEnabled = true;
