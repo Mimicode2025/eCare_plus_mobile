@@ -96,13 +96,13 @@ void main() {
     await tester.pump(const Duration(seconds: 3));
   });
 
-  testWidgets('Follow-up validates values and updates statistics', (
+  testWidgets('Follow-up validates values and updates its chart and history', (
     tester,
   ) async {
     await openHome(tester);
     await tester.tap(find.text('Suivi').first);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Ajouter une mesure'));
+    await tester.tap(find.byTooltip('Ajouter une mesure'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField), '-1');
     await tester.tap(find.text('Enregistrer la mesure'));
@@ -111,11 +111,14 @@ void main() {
     await tester.enterText(find.byType(TextFormField), '98,5');
     await tester.tap(find.text('Enregistrer la mesure'));
     await tester.pumpAndSettle();
+    expect(find.text('1 mesure sur la période'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('98.5 mg/dL'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('98.5 mg/dL'), findsWidgets);
-    await tester.tap(find.text('Mes statistiques'));
-    await tester.pumpAndSettle();
-    expect(find.text('1 mesure(s) enregistrée(s)'), findsOneWidget);
-    expect(find.text('Dernière mesure : 98.5 mg/dL'), findsOneWidget);
+    expect(find.text('Mes statistiques'), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 3));

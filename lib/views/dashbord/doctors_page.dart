@@ -56,15 +56,25 @@ class _DoctorsPageState extends State<DoctorsPage> {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(18),
+                          width: 66,
+                          height: 66,
                           decoration: BoxDecoration(
                             color: doctor.color,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Icon(
-                            doctor.icon,
-                            color: AppColors.primary,
-                            size: 30,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              doctor.imageAsset,
+                              fit: BoxFit.cover,
+                              alignment: Alignment.topCenter,
+                              semanticLabel: doctor.name,
+                              errorBuilder: (_, _, _) => Icon(
+                                doctor.icon,
+                                color: AppColors.primary,
+                                size: 30,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 16),

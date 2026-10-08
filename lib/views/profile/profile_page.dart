@@ -44,11 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!mounted) return;
     setState(() => _loading = false);
     if (widget.firstTime) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.home,
-        (r) => false,
-      );
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (r) => false);
     } else {
       Navigator.pop(context);
     }
@@ -75,35 +71,48 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: 42,
                           height: 42,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: AppDecor.shadow()),
-                          child: const Icon(Icons.arrow_back_rounded,
-                              color: AppColors.textDark),
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: AppDecor.shadow(),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_rounded,
+                            color: AppColors.textDark,
+                          ),
                         ),
                       )
                     else
                       const SizedBox(width: 42),
                     Expanded(
-                      child: Text('Votre profil',
-                          textAlign: TextAlign.center,
-                          style: AppDecor.t(20, w: FontWeight.w700, c: AppColors.primary)),
+                      child: Text(
+                        'Votre profil',
+                        textAlign: TextAlign.center,
+                        style: AppDecor.t(
+                          20,
+                          w: FontWeight.w700,
+                          c: AppColors.primary,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 42),
                   ],
                 ),
                 const SizedBox(height: 22),
-                _Avatar(onAdd: () {
-                  // TODO: image_picker
-                }),
+                _Avatar(
+                  onAdd: () {
+                    // TODO: image_picker
+                  },
+                ),
                 const SizedBox(height: 28),
                 _Label('Nom'),
                 _input(_nom, 'Votre nom', validator: _required),
                 _Label('Prénom'),
                 _input(_prenom, 'Votre prénom', validator: _required),
                 _Label('Sexe'),
-                _dropdown(_sexe, const ['Femme', 'Homme'],
-                    (v) => setState(() => _sexe = v)),
+                _dropdown(_sexe, const [
+                  'Femme',
+                  'Homme',
+                ], (v) => setState(() => _sexe = v)),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -112,8 +121,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _Label('Poids (kg)'),
-                          _input(_poids, '70',
-                              number: true, validator: _required),
+                          _input(
+                            _poids,
+                            '70',
+                            number: true,
+                            validator: _required,
+                          ),
                         ],
                       ),
                     ),
@@ -123,23 +136,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _Label('Taille (cm)'),
-                          _input(_taille, '175',
-                              number: true, validator: _required),
+                          _input(
+                            _taille,
+                            '175',
+                            number: true,
+                            validator: _required,
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
                 _Label('Groupe sanguin (facultatif)'),
-                _dropdown(
-                    _groupe,
-                    const ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-                    (v) => setState(() => _groupe = v)),
+                _dropdown(_groupe, const [
+                  'A+',
+                  'A-',
+                  'B+',
+                  'B-',
+                  'AB+',
+                  'AB-',
+                  'O+',
+                  'O-',
+                ], (v) => setState(() => _groupe = v)),
                 const SizedBox(height: 30),
                 GradientButton(
-                    text: 'Enregistrer',
-                    onPressed: _save,
-                    isLoading: _loading),
+                  text: 'Enregistrer',
+                  onPressed: _save,
+                  isLoading: _loading,
+                ),
               ],
             ),
           ),
@@ -149,26 +173,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   InputDecoration _deco(String hint) => InputDecoration(
-        hintText: hint,
-        hintStyle: AppDecor.t(14, c: AppColors.textMuted),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        border: _border(AppColors.border),
-        enabledBorder: _border(AppColors.border),
-        focusedBorder: _border(AppColors.primary, 1.6),
-        errorBorder: _border(Colors.redAccent),
-        focusedErrorBorder: _border(Colors.redAccent, 1.6),
-      );
+    hintText: hint,
+    hintStyle: AppDecor.t(14, c: AppColors.textMuted),
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+    border: _border(AppColors.border),
+    enabledBorder: _border(AppColors.border),
+    focusedBorder: _border(AppColors.primary, 1.6),
+    errorBorder: _border(Colors.redAccent),
+    focusedErrorBorder: _border(Colors.redAccent, 1.6),
+  );
 
   OutlineInputBorder _border(Color c, [double w = 1]) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide(color: c, width: w),
-      );
+    borderRadius: BorderRadius.circular(18),
+    borderSide: BorderSide(color: c, width: w),
+  );
 
-  Widget _input(TextEditingController c, String hint,
-      {bool number = false, String? Function(String?)? validator}) {
+  Widget _input(
+    TextEditingController c,
+    String hint, {
+    bool number = false,
+    String? Function(String?)? validator,
+  }) {
     return TextFormField(
       controller: c,
       validator: validator,
@@ -179,11 +206,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _dropdown(
-      String? value, List<String> items, ValueChanged<String?> onChanged) {
+    String? value,
+    List<String> items,
+    ValueChanged<String?> onChanged,
+  ) {
     return DropdownButtonFormField<String>(
       initialValue: value,
       isExpanded: true,
-      icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textMuted),
+      icon: const Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: AppColors.textMuted,
+      ),
       decoration: _deco('Sélectionner'),
       style: AppDecor.t(14.5, w: FontWeight.w600),
       items: items
@@ -200,12 +233,12 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 8, left: 4),
-          child: Text(text, style: AppDecor.t(13, w: FontWeight.w600)),
-        ),
-      );
+    alignment: Alignment.centerLeft,
+    child: Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 8, left: 4),
+      child: Text(text, style: AppDecor.t(13, w: FontWeight.w600)),
+    ),
+  );
 }
 
 class _Avatar extends StatelessWidget {
@@ -219,13 +252,14 @@ class _Avatar extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(4),
           decoration: const BoxDecoration(
-              gradient: AppDecor.gradient, shape: BoxShape.circle),
+            gradient: AppDecor.gradient,
+            shape: BoxShape.circle,
+          ),
           child: const CircleAvatar(
             radius: 58,
             backgroundColor: AppColors.primaryLighter,
-            backgroundImage: AssetImage('assets/images/avatar.png'),
+            backgroundImage: AssetImage('lib/data/Profile.png'),
             onBackgroundImageError: _ignore,
-            child: Icon(Icons.person_rounded, size: 56, color: AppColors.primary),
           ),
         ),
         Positioned(
@@ -241,8 +275,11 @@ class _Avatar extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 3),
               ),
-              child: const Icon(Icons.add_rounded,
-                  color: Colors.white, size: 19),
+              child: const Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+                size: 19,
+              ),
             ),
           ),
         ),

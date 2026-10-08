@@ -41,6 +41,24 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    await tester.runAsync(() async {
+      final context = tester.element(find.byType(MaterialApp));
+      await precacheImage(const AssetImage('lib/data/Docteur1.png'), context);
+      if (!context.mounted) return;
+      await precacheImage(const AssetImage('lib/data/Docteur 2.png'), context);
+      for (final asset in [
+        'lib/data/Profile.png',
+        'lib/data/icon_suivi.png',
+        'lib/data/icon_document.png',
+        'lib/data/icon_medicament.png',
+        'lib/data/Icon_medecin.png',
+      ]) {
+        if (!context.mounted) return;
+        await precacheImage(AssetImage(asset), context);
+      }
+    });
+    await tester.pumpAndSettle();
+
     Future<void> capture(String name) async {
       await tester.runAsync(() async {
         final render =

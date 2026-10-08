@@ -98,49 +98,6 @@ class HomePage extends StatelessWidget {
                         _DoctorCard(doctor: doctorCatalog[index]),
                   ),
                 ),
-                const SizedBox(height: 26),
-                Material(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(22),
-                    onTap: () =>
-                        Navigator.pushNamed(context, AppRoutes.statistics),
-                    child: Padding(
-                      padding: const EdgeInsets.all(18),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.insights_rounded,
-                            color: AppColors.primary,
-                            size: 30,
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Votre suivi, en un coup d’œil',
-                                  style: AppDecor.t(13, w: FontWeight.w700),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Retrouvez vos dernières mesures',
-                                  style: AppDecor.t(11, c: AppColors.textMuted),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.primary,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -176,11 +133,7 @@ class _Header extends StatelessWidget {
               child: const CircleAvatar(
                 radius: 25,
                 backgroundColor: AppColors.primaryLighter,
-                child: Icon(
-                  Icons.person_rounded,
-                  color: AppColors.primary,
-                  size: 30,
-                ),
+                backgroundImage: AssetImage('lib/data/Profile.png'),
               ),
             ),
           ),
@@ -193,11 +146,6 @@ class _Header extends StatelessWidget {
               Text(
                 '$greeting Gloria',
                 style: AppDecor.t(17, w: FontWeight.w700),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Comment allez-vous aujourd’hui ?',
-                style: AppDecor.t(11.5, c: AppColors.textMuted, h: 1.5),
               ),
             ],
           ),
@@ -289,28 +237,6 @@ class _WelcomeCard extends StatelessWidget {
                 'Votre suivi médical\ncommence ici.',
                 style: AppDecor.t(13, c: AppColors.textMuted, h: 1.6),
               ),
-              const SizedBox(height: 14),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.primaryLighter,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProfilePage()),
-                ),
-                child: Text(
-                  'Compléter mon profil',
-                  style: AppDecor.t(
-                    11,
-                    c: AppColors.primary,
-                    w: FontWeight.w700,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -331,11 +257,30 @@ class _QuickActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const items = [
-      (Icons.monitor_heart_outlined, 'Suivi', AppRoutes.followUp),
-      (Icons.folder_copy_outlined, 'Documents', AppRoutes.documents),
-      (Icons.medication_outlined, 'Traitements', AppRoutes.treatments),
-      (Icons.medical_services_outlined, 'Médecins', AppRoutes.doctors),
-      (Icons.bar_chart_rounded, 'Statistiques', AppRoutes.statistics),
+      (
+        Icons.monitor_heart_outlined,
+        'Suivi',
+        AppRoutes.followUp,
+        'lib/data/icon_suivi.png',
+      ),
+      (
+        Icons.folder_copy_outlined,
+        'Documents',
+        AppRoutes.documents,
+        'lib/data/icon_document.png',
+      ),
+      (
+        Icons.medication_outlined,
+        'Traitements',
+        AppRoutes.treatments,
+        'lib/data/icon_medicament.png',
+      ),
+      (
+        Icons.medical_services_outlined,
+        'Médecins',
+        AppRoutes.doctors,
+        'lib/data/Icon_medecin.png',
+      ),
     ];
     final textGrowth = (MediaQuery.textScalerOf(context).scale(11) / 11 - 1)
         .clamp(0, double.infinity)
@@ -359,15 +304,22 @@ class _QuickActions extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: AppColors.primaryLighter,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Icon(
-                      items[index].$1,
-                      color: AppColors.primary,
-                      size: 24,
+                    child: Image.asset(
+                      items[index].$4,
+                      width: 32,
+                      height: 32,
+                      fit: BoxFit.contain,
+                      excludeFromSemantics: true,
+                      errorBuilder: (_, _, _) => Icon(
+                        items[index].$1,
+                        color: AppColors.primary,
+                        size: 32,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 11),
@@ -410,23 +362,16 @@ class _DoctorCard extends StatelessWidget {
             color: doctor.color,
             borderRadius: BorderRadius.circular(18),
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: -18,
-                right: -18,
-                child: Container(
-                  width: 95,
-                  height: 95,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .5),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-              Icon(doctor.icon, color: AppColors.primary, size: 54),
-            ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.asset(
+              doctor.imageAsset,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+              semanticLabel: doctor.name,
+              errorBuilder: (_, _, _) =>
+                  Icon(doctor.icon, color: AppColors.primary, size: 54),
+            ),
           ),
         ),
         const SizedBox(height: 12),

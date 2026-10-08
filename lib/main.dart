@@ -21,7 +21,6 @@ import 'views/dashbord/doctors_page.dart';
 import 'views/dashbord/treatments_page.dart';
 import 'views/notification/notifications_page.dart';
 import 'views/measurement/follow_up_page.dart';
-import 'views/statistics/statistics_page.dart';
 import 'views/error/page_not_found_page.dart';
 import 'views/error/no_connection_page.dart';
 
@@ -66,7 +65,6 @@ class ECarePlusApp extends StatelessWidget {
           AppRoutes.documents: (_) => const DocumentsPage(),
           AppRoutes.doctors: (_) => const DoctorsPage(),
           AppRoutes.treatments: (_) => const TreatmentsPage(),
-          AppRoutes.statistics: (_) => const StatisticsPage(),
           AppRoutes.pageNotFound: (_) => const PageNotFoundPage(),
           AppRoutes.noConnection: (_) => const NoConnectionPage(),
         },

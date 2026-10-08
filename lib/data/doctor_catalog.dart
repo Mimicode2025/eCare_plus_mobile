@@ -5,7 +5,14 @@ class CareDoctor {
   final String specialty;
   final IconData icon;
   final Color color;
-  const CareDoctor(this.name, this.specialty, this.icon, this.color);
+  final String imageAsset;
+  const CareDoctor(
+    this.name,
+    this.specialty,
+    this.icon,
+    this.color,
+    this.imageAsset,
+  );
 }
 
 // Illustrative profiles from the existing home screen, awaiting the directory.
@@ -15,11 +22,13 @@ const doctorCatalog = [
     'Médecin généraliste',
     Icons.medical_services_outlined,
     Color(0xFFE4F2FF),
+    'lib/data/Docteur1.png',
   ),
   CareDoctor(
     'Dr Lawson Jennifer',
     'Cardiologue',
     Icons.monitor_heart_outlined,
     Color(0xFFE4F5F1),
+    'lib/data/Docteur 2.png',
   ),
 ];

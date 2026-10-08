@@ -12,14 +12,28 @@ class GlucoseReading {
   const GlucoseReading({required this.value, required this.date});
 }
 
+class BloodPressureReading {
+  final double systolic;
+  final double diastolic;
+  final DateTime date;
+  const BloodPressureReading({
+    required this.systolic,
+    required this.diastolic,
+    required this.date,
+  });
+}
+
 /// Local session data until the patient services are connected.
 class CareData extends ChangeNotifier {
   final List<CareAppointment> _appointments = [];
   final List<GlucoseReading> _readings = [];
+  final List<BloodPressureReading> _bloodPressureReadings = [];
   bool remindersEnabled = true;
 
   List<CareAppointment> get appointments => List.unmodifiable(_appointments);
   List<GlucoseReading> get readings => List.unmodifiable(_readings);
+  List<BloodPressureReading> get bloodPressureReadings =>
+      List.unmodifiable(_bloodPressureReadings);
 
   void addAppointment(CareAppointment appointment) {
     _appointments.add(appointment);
@@ -32,8 +46,21 @@ class CareData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addReading(double value) {
-    _readings.insert(0, GlucoseReading(value: value, date: DateTime.now()));
+  void addReading(double value, {DateTime? date}) {
+    _readings.add(GlucoseReading(value: value, date: date ?? DateTime.now()));
+    _readings.sort((a, b) => b.date.compareTo(a.date));
+    notifyListeners();
+  }
+
+  void addBloodPressure(double systolic, double diastolic, {DateTime? date}) {
+    _bloodPressureReadings.add(
+      BloodPressureReading(
+        systolic: systolic,
+        diastolic: diastolic,
+        date: date ?? DateTime.now(),
+      ),
+    );
+    _bloodPressureReadings.sort((a, b) => b.date.compareTo(a.date));
     notifyListeners();
   }
 
@@ -45,6 +72,7 @@ class CareData extends ChangeNotifier {
   void clear() {
     _appointments.clear();
     _readings.clear();
+    _bloodPressureReadings.clear();
     remindersEnabled = true;
     notifyListeners();
   }

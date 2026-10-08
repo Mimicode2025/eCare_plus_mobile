@@ -67,6 +67,14 @@ flutter:
     - assets/images/
     - lib/data/error_404.png
     - lib/data/error_pas de connection.png
+    - lib/data/Docteur1.png
+    - lib/data/Docteur 2.png
+    - lib/data/Profile.png
+    - lib/data/icon_suivi.png
+    - lib/data/icon_document.png
+    - lib/data/icon_medicament.png
+    - lib/data/Icon_bon a savoir.png
+    - lib/data/Icon_medecin.png
 
   fonts:
     - family: Poppins
