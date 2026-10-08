@@ -24,6 +24,8 @@ import 'views/notification/notifications_page.dart';
 import 'views/measurement/follow_up_page.dart';
 import 'views/error/page_not_found_page.dart';
 import 'views/error/no_connection_page.dart';
+import 'views/legal/privacy_policy_page.dart';
+import 'views/legal/terms_of_use_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +75,8 @@ class ECarePlusApp extends StatelessWidget {
           AppRoutes.treatments: (_) => const TreatmentsPage(),
           AppRoutes.pageNotFound: (_) => const PageNotFoundPage(),
           AppRoutes.noConnection: (_) => const NoConnectionPage(),
+          AppRoutes.privacyPolicy: (_) => const PrivacyPolicyPage(),
+          AppRoutes.termsOfUse: (_) => const TermsOfUsePage(),
         },
         onUnknownRoute: (settings) => MaterialPageRoute<void>(
           settings: settings,

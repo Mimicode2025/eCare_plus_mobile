@@ -135,10 +135,10 @@ class _LogoMark extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.favorite_rounded,
-            color: AppColors.primary,
-            size: 22,
+          child: Image.asset(
+            'assets/branding/launcher_foreground.png',
+            fit: BoxFit.contain,
+            excludeFromSemantics: true,
           ),
         ),
         const SizedBox(width: 10),

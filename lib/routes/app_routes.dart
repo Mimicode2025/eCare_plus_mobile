@@ -20,6 +20,8 @@ class AppRoutes {
   static const String documents = '/documents';
   static const String treatments = '/treatments';
   static const String doctors = '/doctors';
+  static const String privacyPolicy = '/privacy-policy';
+  static const String termsOfUse = '/terms-of-use';
 
   // Recoverable errors
   static const String pageNotFound = '/error/not-found';

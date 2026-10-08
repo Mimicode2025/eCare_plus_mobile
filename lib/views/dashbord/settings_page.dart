@@ -191,6 +191,22 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 const _SettingsDivider(),
+                _SettingsRow(
+                  icon: Icons.privacy_tip_outlined,
+                  title: 'Politique de confidentialité',
+                  subtitle: 'Vos données et vos choix',
+                  onTap: () =>
+                      Navigator.pushNamed(context, AppRoutes.privacyPolicy),
+                ),
+                const _SettingsDivider(),
+                _SettingsRow(
+                  icon: Icons.description_outlined,
+                  title: 'Conditions générales d’utilisation',
+                  subtitle: 'Le cadre d’utilisation de eCARE+',
+                  onTap: () =>
+                      Navigator.pushNamed(context, AppRoutes.termsOfUse),
+                ),
+                const _SettingsDivider(),
                 const _SettingsRow(
                   icon: Icons.hourglass_bottom_rounded,
                   title: 'Les données de cette session',

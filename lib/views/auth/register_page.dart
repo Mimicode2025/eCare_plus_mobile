@@ -6,6 +6,7 @@ import '../../widgets/auth_header.dart';
 import '../../widgets/auth_field.dart';
 import '../../widgets/gradient_button.dart';
 import '../../widgets/social_auth_row.dart';
+import '../../widgets/legal_consent.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -34,11 +35,14 @@ class _RegisterPageState extends State<RegisterPage>
     vsync: this,
     duration: const Duration(milliseconds: 800),
   );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _anim, curve: Curves.easeOut);
-  late final Animation<Offset> _slide =
-      Tween<Offset>(begin: const Offset(0, .08), end: Offset.zero)
-          .animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _anim,
+    curve: Curves.easeOut,
+  );
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: const Offset(0, .08),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
 
   @override
   void initState() {
@@ -50,7 +54,14 @@ class _RegisterPageState extends State<RegisterPage>
 
   @override
   void dispose() {
-    for (final c in [_lastName, _firstName, _email, _phone, _password, _confirm]) {
+    for (final c in [
+      _lastName,
+      _firstName,
+      _email,
+      _phone,
+      _password,
+      _confirm,
+    ]) {
       c.dispose();
     }
     _anim.dispose();
@@ -74,18 +85,17 @@ class _RegisterPageState extends State<RegisterPage>
       (v == null || v.trim().isEmpty) ? 'Obligatoire' : null;
 
   Widget _eye(bool obscured, VoidCallback onTap) => IconButton(
-        tooltip: obscured ? 'Afficher' : 'Masquer',
-        onPressed: onTap,
-        icon: Icon(
-          obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-          color: AppColors.textHint,
-          size: 21,
-        ),
-      );
+    tooltip: obscured ? 'Afficher' : 'Masquer',
+    onPressed: onTap,
+    icon: Icon(
+      obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+      color: AppColors.textHint,
+      size: 21,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    final accent = _termsError ? AppColors.required : AppColors.primary;
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
       body: GestureDetector(
@@ -97,7 +107,8 @@ class _RegisterPageState extends State<RegisterPage>
             children: [
               const AuthHeader(
                 title: 'Créez votre\ncompte',
-                subtitle: 'Remplissez ce formulaire pour débuter votre accompagnement personnalisé.',
+                subtitle:
+                    'Remplissez ce formulaire pour débuter votre accompagnement personnalisé.',
                 height: 330,
                 showBack: true,
               ),
@@ -131,7 +142,8 @@ class _RegisterPageState extends State<RegisterPage>
                                 child: Column(
                                   children: [
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
                                           child: AuthField(
@@ -160,9 +172,12 @@ class _RegisterPageState extends State<RegisterPage>
                                       keyboardType: TextInputType.emailAddress,
                                       validator: (v) {
                                         final s = v?.trim() ?? '';
-                                        if (s.isEmpty) return 'Ce champ est obligatoire';
-                                        return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
-                                                .hasMatch(s)
+                                        if (s.isEmpty) {
+                                          return 'Ce champ est obligatoire';
+                                        }
+                                        return RegExp(
+                                              r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                                            ).hasMatch(s)
                                             ? null
                                             : 'Email invalide';
                                       },
@@ -175,9 +190,16 @@ class _RegisterPageState extends State<RegisterPage>
                                       prefixText: '+228',
                                       keyboardType: TextInputType.phone,
                                       validator: (v) {
-                                        final d = (v ?? '').replaceAll(RegExp(r'\D'), '');
-                                        if (d.isEmpty) return 'Ce champ est obligatoire';
-                                        return d.length < 8 ? 'Numéro invalide' : null;
+                                        final d = (v ?? '').replaceAll(
+                                          RegExp(r'\D'),
+                                          '',
+                                        );
+                                        if (d.isEmpty) {
+                                          return 'Ce champ est obligatoire';
+                                        }
+                                        return d.length < 8
+                                            ? 'Numéro invalide'
+                                            : null;
                                       },
                                     ),
                                     const SizedBox(height: 16),
@@ -187,8 +209,12 @@ class _RegisterPageState extends State<RegisterPage>
                                       icon: Icons.lock_outline_rounded,
                                       obscureText: _obscure,
                                       onChanged: (_) => setState(() {}),
-                                      suffix: _eye(_obscure,
-                                          () => setState(() => _obscure = !_obscure)),
+                                      suffix: _eye(
+                                        _obscure,
+                                        () => setState(
+                                          () => _obscure = !_obscure,
+                                        ),
+                                      ),
                                       validator: (v) {
                                         if (v == null || v.isEmpty) {
                                           return 'Ce champ est obligatoire';
@@ -207,9 +233,12 @@ class _RegisterPageState extends State<RegisterPage>
                                       obscureText: _obscureConfirm,
                                       textInputAction: TextInputAction.done,
                                       suffix: _eye(
-                                          _obscureConfirm,
-                                          () => setState(
-                                              () => _obscureConfirm = !_obscureConfirm)),
+                                        _obscureConfirm,
+                                        () => setState(
+                                          () => _obscureConfirm =
+                                              !_obscureConfirm,
+                                        ),
+                                      ),
                                       validator: (v) {
                                         if (v == null || v.isEmpty) {
                                           return 'Ce champ est obligatoire';
@@ -223,81 +252,14 @@ class _RegisterPageState extends State<RegisterPage>
                                 ),
                               ),
                               const SizedBox(height: 18),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(10),
-                                onTap: () => setState(() {
-                                  _accept = !_accept;
+                              LegalConsent(
+                                value: _accept,
+                                showError: _termsError,
+                                onChanged: (value) => setState(() {
+                                  _accept = value;
                                   if (_accept) _termsError = false;
                                 }),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 22,
-                                        height: 22,
-                                        child: Checkbox(
-                                          value: _accept,
-                                          onChanged: (v) => setState(() {
-                                            _accept = v ?? false;
-                                            if (_accept) _termsError = false;
-                                          }),
-                                          activeColor: AppColors.primary,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(6)),
-                                          side: BorderSide(
-                                              color: _termsError
-                                                  ? AppColors.required
-                                                  : AppColors.borderDark,
-                                              width: 1.5),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text.rich(
-                                          TextSpan(
-                                            text: "J'accepte la ",
-                                            style: AppTextStyles.caption.copyWith(
-                                              color: _termsError
-                                                  ? AppColors.required
-                                                  : AppColors.textMuted,
-                                              fontSize: 13,
-                                              height: 1.5,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: 'politique de confidentialité',
-                                                style: TextStyle(
-                                                    color: accent,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              const TextSpan(text: ' et les '),
-                                              TextSpan(
-                                                text: "conditions générales d'utilisation",
-                                                style: TextStyle(
-                                                    color: accent,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              const TextSpan(text: '.'),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ),
-                              if (_termsError)
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 34, top: 2),
-                                    child: Text('Acceptez pour continuer.',
-                                        style: AppTextStyles.caption.copyWith(
-                                            color: AppColors.required, fontSize: 12)),
-                                  ),
-                                ),
                               const SizedBox(height: 22),
                               GradientButton(
                                 text: "S'inscrire",
@@ -320,14 +282,22 @@ class _RegisterPageState extends State<RegisterPage>
                   alignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Text('Vous avez déjà un compte ?',
-                        style: AppTextStyles.body.copyWith(
-                            fontSize: 14.5, color: AppColors.textMuted)),
+                    Text(
+                      'Vous avez déjà un compte ?',
+                      style: AppTextStyles.body.copyWith(
+                        fontSize: 14.5,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Connectez-vous',
-                          style: AppTextStyles.link.copyWith(
-                              fontSize: 15, fontWeight: FontWeight.w700)),
+                      child: Text(
+                        'Connectez-vous',
+                        style: AppTextStyles.link.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -351,7 +321,10 @@ class _StrengthBar extends StatelessWidget {
     if (password.isEmpty) return const SizedBox.shrink();
     var score = 0;
     if (password.length >= 8) score++;
-    if (RegExp(r'[A-Z]').hasMatch(password) && RegExp(r'[a-z]').hasMatch(password)) score++;
+    if (RegExp(r'[A-Z]').hasMatch(password) &&
+        RegExp(r'[a-z]').hasMatch(password)) {
+      score++;
+    }
     if (RegExp(r'\d').hasMatch(password)) score++;
     if (RegExp(r'[^A-Za-z0-9]').hasMatch(password)) score++;
 
@@ -381,9 +354,14 @@ class _StrengthBar extends StatelessWidget {
               ),
             ),
           const SizedBox(width: 12),
-          Text(labels[score],
-              style: AppTextStyles.caption
-                  .copyWith(color: c, fontSize: 12, fontWeight: FontWeight.w600)),
+          Text(
+            labels[score],
+            style: AppTextStyles.caption.copyWith(
+              color: c,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );

@@ -52,6 +52,7 @@ void main() {
         'lib/data/icon_document.png',
         'lib/data/icon_medicament.png',
         'lib/data/Icon_medecin.png',
+        'assets/branding/launcher_foreground.png',
       ]) {
         if (!context.mounted) return;
         await precacheImage(AssetImage(asset), context);
@@ -118,6 +119,29 @@ void main() {
     expect(find.text('Info'), findsOneWidget);
     expect(find.text('Réessayer').hitTestable(), findsOneWidget);
     await capture('erreur-sans-connexion');
+    Navigator.of(
+      tester.element(find.text('Info')),
+    ).pushReplacementNamed('/login');
+    await tester.pumpAndSettle();
+    await capture('connexion-logo-ecare');
+    Navigator.of(
+      tester.element(find.text('Content de vous\nrevoir !')),
+    ).pushNamed('/privacy-policy');
+    await tester.pumpAndSettle();
+    await capture('politique-confidentialite');
+    Navigator.of(
+      tester.element(find.text('Politique de confidentialité')),
+    ).pushReplacementNamed('/terms-of-use');
+    await tester.pumpAndSettle();
+    await capture('conditions-utilisation');
+    Navigator.of(
+      tester.element(find.text('Conditions générales d’utilisation')),
+    ).pushReplacementNamed('/register');
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.byType(Checkbox), 250,
+      scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await capture('inscription-consentement');
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 3));

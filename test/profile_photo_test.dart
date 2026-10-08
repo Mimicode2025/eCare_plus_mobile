@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'package:ecare_plus_mobile/services/profile_photo_service.dart';
 import 'package:ecare_plus_mobile/models/care_data.dart';
 import 'package:ecare_plus_mobile/views/profile/profile_page.dart';
 import 'package:ecare_plus_mobile/widgets/patient_avatar.dart';
@@ -30,6 +30,22 @@ class GalleryPicker extends ImagePicker {
 }
 
 void main() {
+  testWidgets('Reject invalid and oversized photo files', (tester) async {
+    await tester.runAsync(() async {
+      await expectLater(
+        ProfilePhotoService.readPhoto(
+          XFile.fromData(Uint8List.fromList([1, 2, 3]), name: 'invalid.png'),
+        ),
+        throwsA(isA<Exception>()),
+      );
+      await expectLater(
+        ProfilePhotoService.readPhoto(
+          XFile.fromData(Uint8List(10 * 1024 * 1024 + 1), name: 'large.png'),
+        ),
+        throwsA(isA<ProfilePhotoTooLargeException>()),
+      );
+    });
+  });
   Future<void> openProfile(
     WidgetTester tester,
     CareData data,
@@ -56,9 +72,12 @@ void main() {
     );
     await openProfile(tester, data, picker);
     await tester.tap(find.byTooltip('Choisir une photo'));
-    await tester.runAsync(() async {
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-    });
+    for (var i = 0; i < 50 && data.profilePhoto == null; i++) {
+      await tester.pump();
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
+    }
     await tester.pumpAndSettle();
     expect(picker.calls, 1);
     expect(data.profilePhoto, isNotNull);
