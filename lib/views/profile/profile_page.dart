@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
           content: Text(
             denied
                 ? 'Autorisez l’accès aux photos dans les paramètres du téléphone.'
-                : error is FormatException
+              : error is ProfilePhotoTooLargeException
                 ? 'Cette photo est trop volumineuse. Choisissez une image de moins de 10 Mo.'
                 : 'Impossible d’importer cette photo. Essayez une autre image.',
           ),

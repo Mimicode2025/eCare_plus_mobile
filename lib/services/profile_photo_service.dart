@@ -3,10 +3,14 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
+class ProfilePhotoTooLargeException implements Exception {
+  const ProfilePhotoTooLargeException();
+}
+
 class ProfilePhotoService {
   static Future<Uint8List> readPhoto(XFile image) async {
     if (await image.length() > 10 * 1024 * 1024) {
-      throw const FormatException('Photo trop volumineuse');
+      throw const ProfilePhotoTooLargeException();
     }
     final bytes = await image.readAsBytes();
     final codec = await ui.instantiateImageCodec(bytes, targetWidth: 512);
