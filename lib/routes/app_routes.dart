@@ -21,4 +21,8 @@ class AppRoutes {
   static const String treatments = '/treatments';
   static const String doctors = '/doctors';
   static const String statistics = '/statistics';
+
+  // Recoverable errors
+  static const String pageNotFound = '/error/not-found';
+  static const String noConnection = '/error/no-connection';
 }

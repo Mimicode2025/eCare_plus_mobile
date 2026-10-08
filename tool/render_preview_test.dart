@@ -66,6 +66,28 @@ void main() {
     await tester.tap(find.text('Rendez-vous').last);
     await tester.pumpAndSettle();
     await capture('rendez-vous-mobile');
+    await tester.runAsync(() async {
+      final context = tester.element(find.byType(MaterialApp));
+      await precacheImage(const AssetImage('lib/data/error_404.png'), context);
+      if (!context.mounted) return;
+      await precacheImage(
+        const AssetImage('lib/data/error_pas de connection.png'),
+        context,
+      );
+    });
+    Navigator.of(
+      tester.element(find.text('Mes rendez-vous')),
+    ).pushNamed('/error/not-found');
+    await tester.pumpAndSettle();
+    await capture('erreur-page-indisponible');
+    Navigator.of(
+      tester.element(find.text('Info')),
+    ).pushReplacementNamed('/error/no-connection');
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('Info'), findsOneWidget);
+    expect(find.text('Réessayer').hitTestable(), findsOneWidget);
+    await capture('erreur-sans-connexion');
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 3));
