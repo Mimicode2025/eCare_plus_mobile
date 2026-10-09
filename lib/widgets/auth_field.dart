@@ -10,6 +10,7 @@ class AuthField extends StatelessWidget {
   final bool obscureText;
   final Widget? suffix;
   final String? prefixText;
+  final String? helperText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
@@ -23,6 +24,7 @@ class AuthField extends StatelessWidget {
     this.obscureText = false,
     this.suffix,
     this.prefixText,
+    this.helperText,
     this.keyboardType,
     this.textInputAction = TextInputAction.next,
     this.validator,
@@ -47,6 +49,9 @@ class AuthField extends StatelessWidget {
       style: AppTextStyles.body.copyWith(fontSize: 15, color: AppColors.textMuted),
       decoration: InputDecoration(
         labelText: label,
+        helperText: helperText,
+        helperStyle: AppTextStyles.caption
+            .copyWith(color: AppColors.textMuted, fontSize: 12),
         labelStyle: AppTextStyles.body
             .copyWith(fontSize: 14, color: AppColors.textHint),
         floatingLabelStyle: AppTextStyles.body.copyWith(

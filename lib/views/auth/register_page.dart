@@ -205,6 +205,7 @@ class _RegisterPageState extends State<RegisterPage>
                                     const SizedBox(height: 16),
                                     AuthField(
                                       label: 'Mot de passe',
+                                      helperText: 'Minimum 8 caractères',
                                       controller: _password,
                                       icon: Icons.lock_outline_rounded,
                                       obscureText: _obscure,
@@ -228,6 +229,7 @@ class _RegisterPageState extends State<RegisterPage>
                                     const SizedBox(height: 16),
                                     AuthField(
                                       label: 'Confirmer le mot de passe',
+                                      helperText: 'Minimum 8 caractères',
                                       controller: _confirm,
                                       icon: Icons.lock_outline_rounded,
                                       obscureText: _obscureConfirm,

@@ -117,6 +117,7 @@ class _LoginPageState extends State<LoginPage>
                                     const SizedBox(height: 16),
                                     AuthField(
                                       label: 'Mot de passe',
+                                      helperText: 'Minimum 8 caractères',
                                       controller: _passwordController,
                                       icon: Icons.lock_outline_rounded,
                                       obscureText: _obscure,
