@@ -64,7 +64,10 @@ class ECarePlusApp extends StatelessWidget {
           AppRoutes.login: (_) => const LoginPage(),
           AppRoutes.register: (_) => const RegisterPage(),
           AppRoutes.forgotPassword: (_) => const ForgotPasswordPage(),
-          AppRoutes.registrationSuccess: (_) => const RegistrationSuccessPage(),
+          AppRoutes.registrationSuccess: (context) => RegistrationSuccessPage(
+            firstRegistration:
+                ModalRoute.of(context)?.settings.arguments == true,
+          ),
           AppRoutes.home: (_) => const MainShell(),
           AppRoutes.profile: (_) => const ProfilePage(firstTime: true),
           AppRoutes.appointments: (_) => const AppointmentsPage(),

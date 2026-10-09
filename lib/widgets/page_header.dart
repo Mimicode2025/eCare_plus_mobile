@@ -69,15 +69,25 @@ class PageBackButton extends StatelessWidget {
     this.backgroundColor = AppColors.primaryLighter,
   });
   @override
-  Widget build(BuildContext context) => IconButton.filledTonal(
-    tooltip: 'Retour',
-    style: IconButton.styleFrom(
-      minimumSize: const Size(48, 48),
-      backgroundColor: backgroundColor,
-      foregroundColor: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  Widget build(BuildContext context) => Center(
+    widthFactor: 1,
+    heightFactor: 1,
+    child: SizedBox(
+      width: 48,
+      height: 48,
+      child: IconButton.filledTonal(
+        tooltip: 'Retour',
+        style: IconButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          backgroundColor: backgroundColor,
+          foregroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        onPressed: () => Navigator.maybePop(context),
+        icon: const Icon(Icons.arrow_back_rounded, size: 22),
+      ),
     ),
-    onPressed: () => Navigator.maybePop(context),
-    icon: const Icon(Icons.arrow_back_rounded, size: 22),
   );
 }

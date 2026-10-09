@@ -320,9 +320,10 @@ class _DoctorChatPageState extends State<DoctorChatPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        leading: const PageBackButton(
+        leadingWidth: 64,
+        leading: PageBackButton(
           color: Colors.white,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white.withAlpha(45),
         ),
         titleSpacing: 0,
         title: InkWell(

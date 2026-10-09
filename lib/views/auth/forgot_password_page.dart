@@ -38,8 +38,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     });
   }
 
-  void _toLogin() => Navigator.pushNamedAndRemoveUntil(
-      context, AppRoutes.login, (r) => false);
+  void _toLogin() =>
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (r) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +51,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ? null
           : TextButton.icon(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_ios_rounded,
-                  size: 14, color: AppColors.primary),
-              label: Text('Retour à la connexion',
-                  style: AppTextStyles.link
-                      .copyWith(fontSize: 14.5, fontWeight: FontWeight.w700)),
+              icon: const Icon(
+                Icons.arrow_back_rounded,
+                size: 22,
+                color: AppColors.primary,
+              ),
+              label: Text(
+                'Retour à la connexion',
+                style: AppTextStyles.link.copyWith(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 350),
@@ -81,9 +88,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       'Entrez votre Email. Nous vous enverrons un code pour modifier votre mot de passe.',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.body.copyWith(
-                          fontSize: 14,
-                          height: 1.55,
-                          color: AppColors.textMuted),
+                        fontSize: 14,
+                        height: 1.55,
+                        color: AppColors.textMuted,
+                      ),
                     ),
                     const SizedBox(height: 22),
                     AuthField(
@@ -147,29 +155,39 @@ class _SentView extends StatelessWidget {
     return Column(
       children: [
         const _RoundIcon(
-            icon: Icons.mark_email_read_rounded,
-            color: AppColors.success,
-            bg: Color(0xFFDCFCE7)),
+          icon: Icons.mark_email_read_rounded,
+          color: AppColors.success,
+          bg: Color(0xFFDCFCE7),
+        ),
         const SizedBox(height: 18),
-        Text('E-mail envoyé !',
-            style: AppTextStyles.heading1.copyWith(
-                fontSize: 22,
-                color: AppColors.primary,
-                fontWeight: FontWeight.w800)),
+        Text(
+          'E-mail envoyé !',
+          style: AppTextStyles.heading1.copyWith(
+            fontSize: 22,
+            color: AppColors.primary,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
         const SizedBox(height: 10),
         Text.rich(
           TextSpan(
             text: 'Les instructions ont été envoyées à\n',
             style: AppTextStyles.body.copyWith(
-                fontSize: 14, height: 1.6, color: AppColors.textMuted),
+              fontSize: 14,
+              height: 1.6,
+              color: AppColors.textMuted,
+            ),
             children: [
               TextSpan(
                 text: target,
                 style: const TextStyle(
-                    fontWeight: FontWeight.w700, color: AppColors.primary),
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
               ),
               const TextSpan(
-                  text: '\n\nPensez à vérifier vos courriers indésirables.'),
+                text: '\n\nPensez à vérifier vos courriers indésirables.',
+              ),
             ],
           ),
           textAlign: TextAlign.center,

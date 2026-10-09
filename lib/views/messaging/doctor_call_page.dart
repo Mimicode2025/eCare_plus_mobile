@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/doctor_catalog.dart';
 import '../../utils/app_colors.dart';
+import '../../widgets/page_header.dart';
 import 'doctor_video_preview.dart';
 
 class DoctorCallPage extends StatefulWidget {
@@ -106,15 +107,8 @@ class _DoctorCallPageState extends State<DoctorCallPage> {
                   children: [
                     Row(
                       children: [
-                        IconButton(
-                          tooltip: 'Retour',
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(
-                            Icons.arrow_back_rounded,
-                            color: AppColors.textMuted,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
+                        const PageBackButton(),
+                        const SizedBox(width: 12),
                         const Expanded(
                           child: Text(
                             'Appel audio',

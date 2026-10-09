@@ -14,6 +14,7 @@ class DoctorContactPage extends StatelessWidget {
     backgroundColor: Colors.white,
     appBar: AppBar(
       backgroundColor: Colors.white,
+      leadingWidth: 64,
       leading: const PageBackButton(),
       title: const Text('Profil du médecin'),
     ),

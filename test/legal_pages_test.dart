@@ -4,6 +4,7 @@ import 'package:ecare_plus_mobile/views/auth/register_page.dart';
 import 'package:ecare_plus_mobile/views/auth/registration_success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> openRoute(WidgetTester tester, String route) async {
   await tester.pumpWidget(const ECarePlusApp());
@@ -14,6 +15,7 @@ Future<void> openRoute(WidgetTester tester, String route) async {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
   testWidgets('Registration legal links open without accepting the checkbox', (
     tester,
   ) async {
@@ -88,6 +90,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(RegistrationSuccessPage), findsOneWidget);
     expect(tester.takeException(), isNull);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    expect(find.text('Se connecter'), findsOneWidget);
   });
 
   testWidgets(

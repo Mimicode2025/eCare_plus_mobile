@@ -7,6 +7,7 @@ import '../../widgets/auth_field.dart';
 import '../../widgets/gradient_button.dart';
 import '../../widgets/social_auth_row.dart';
 import '../../widgets/legal_consent.dart';
+import '../../services/registration_welcome_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -77,8 +78,16 @@ class _RegisterPageState extends State<RegisterPage>
     // TODO: appel du service d'inscription (téléphone : '+228${_phone.text.trim()}')
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
+    final firstRegistration =
+        await RegistrationWelcomeService.takeFirstRegistration(_email.text);
+    if (!mounted) return;
     setState(() => _loading = false);
-    Navigator.pushReplacementNamed(context, AppRoutes.registrationSuccess);
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      firstRegistration ? AppRoutes.registrationSuccess : AppRoutes.login,
+      (route) => false,
+      arguments: firstRegistration,
+    );
   }
 
   String? _required(String? v) =>

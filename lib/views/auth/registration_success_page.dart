@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_text_styles.dart';
 import '../../routes/app_routes.dart';
 
 class RegistrationSuccessPage extends StatefulWidget {
-  const RegistrationSuccessPage({super.key});
+  final bool firstRegistration;
+  const RegistrationSuccessPage({super.key, this.firstRegistration = false});
 
   @override
   State<RegistrationSuccessPage> createState() =>
@@ -20,22 +22,51 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
     'Notifications activées',
   ];
 
-  late final AnimationController _c = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2200),
-  )..forward();
+  late final AnimationController _c;
+  Timer? _redirect;
 
-  Animation<double> _iv(double a, double b, [Curve curve = Curves.easeOutCubic]) =>
-      CurvedAnimation(parent: _c, curve: Interval(a, b, curve: curve));
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2200),
+    );
+    if (widget.firstRegistration) _c.forward();
+    _redirect = Timer(
+      widget.firstRegistration ? const Duration(seconds: 5) : Duration.zero,
+      () {
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.login,
+          (route) => false,
+        );
+      },
+    );
+  }
+
+  Animation<double> _iv(
+    double a,
+    double b, [
+    Curve curve = Curves.easeOutCubic,
+  ]) => CurvedAnimation(
+    parent: _c,
+    curve: Interval(a, b, curve: curve),
+  );
 
   @override
   void dispose() {
+    _redirect?.cancel();
     _c.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.firstRegistration) {
+      return const Scaffold(body: SizedBox.shrink());
+    }
     final deep = Color.lerp(AppColors.primary, const Color(0xFF06214A), .55)!;
     final badge = _iv(0, .35, Curves.elasticOut);
     final title = _iv(.2, .45);
@@ -77,8 +108,11 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.check_rounded,
-                            color: AppColors.primary, size: 64),
+                        child: const Icon(
+                          Icons.check_rounded,
+                          color: AppColors.primary,
+                          size: 64,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -86,19 +120,23 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
                       opacity: title,
                       child: Column(
                         children: [
-                          Text('Félicitations !',
-                              style: AppTextStyles.heading1.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w800)),
+                          Text(
+                            'Félicitations !',
+                            style: AppTextStyles.heading1.copyWith(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                           const SizedBox(height: 10),
                           Text(
                             'Votre profil est configuré. Vous êtes prêt à prendre soin de votre santé.',
                             textAlign: TextAlign.center,
                             style: AppTextStyles.body.copyWith(
-                                color: Colors.white.withAlpha(225),
-                                fontSize: 15,
-                                height: 1.5),
+                              color: Colors.white.withAlpha(225),
+                              fontSize: 15,
+                              height: 1.5,
+                            ),
                           ),
                         ],
                       ),
@@ -124,36 +162,15 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
                     ),
                     const SizedBox(height: 32),
                     FadeTransition(
-                      opacity: _iv(.8, 1),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                              context, AppRoutes.home, (r) => false),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: AppColors.primary,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18)),
-                          ),
-                          child: Text('Accéder au tableau de bord',
-                              style: AppTextStyles.label.copyWith(
-                                  color: AppColors.primary,
-                                  fontSize: 15.5,
-                                  fontWeight: FontWeight.w800)),
+                      opacity: _iv(.85, 1),
+                      child: Text(
+                        'Vous allez être redirigé vers la page de connexion…',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.caption.copyWith(
+                          color: Colors.white.withAlpha(200),
+                          fontSize: 13,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    FadeTransition(
-                      opacity: _iv(.85, 1),
-                      child: Text('Commencez votre suivi de santé dès maintenant.',
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.caption.copyWith(
-                              color: Colors.white.withAlpha(200),
-                              fontSize: 13)),
                     ),
                   ],
                 ),
@@ -176,8 +193,10 @@ class _CheckRow extends StatelessWidget {
     return FadeTransition(
       opacity: animation,
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(.12, 0), end: Offset.zero)
-            .animate(animation),
+        position: Tween<Offset>(
+          begin: const Offset(.12, 0),
+          end: Offset.zero,
+        ).animate(animation),
         child: Padding(
           padding: const EdgeInsets.only(bottom: 14),
           child: Row(
@@ -186,17 +205,25 @@ class _CheckRow extends StatelessWidget {
                 width: 26,
                 height: 26,
                 decoration: const BoxDecoration(
-                    color: Colors.white, shape: BoxShape.circle),
-                child: const Icon(Icons.check_rounded,
-                    color: AppColors.primary, size: 17),
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  color: AppColors.primary,
+                  size: 17,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
-                child: Text(label,
-                    style: AppTextStyles.label.copyWith(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600)),
+                child: Text(
+                  label,
+                  style: AppTextStyles.label.copyWith(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           ),
