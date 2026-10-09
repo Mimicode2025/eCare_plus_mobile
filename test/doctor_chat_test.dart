@@ -127,7 +127,7 @@ void main() {
     await tester.tap(find.text('Afficher le contact'));
     await tester.pumpAndSettle();
     expect(find.text('Profil du médecin'), findsOneWidget);
-    expect(find.text('Planifier un rendez-vous'), findsOneWidget);
+    expect(find.text('Prendre rendez-vous'), findsOneWidget);
     await tester.tap(find.byTooltip('Retour'));
     await tester.pumpAndSettle();
     for (final type in ['Appel audio', 'Appel vidéo']) {
