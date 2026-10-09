@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'doctor_message.dart';
 
 enum NotificationCategory { medication, appointment, measurement, alert }
 
@@ -40,6 +41,30 @@ class BloodPressureReading {
 
 /// Local session data until the patient services are connected.
 class CareData extends ChangeNotifier {
+  final Map<String, List<DoctorMessage>> _conversations = {};
+  final Set<String> _blockedDoctors = {};
+
+  List<DoctorMessage> messagesFor(String doctor) =>
+      List.unmodifiable(_conversations[doctor] ?? const <DoctorMessage>[]);
+
+  void addDoctorMessage(String doctor, DoctorMessage message) {
+    if (isDoctorBlocked(doctor)) return;
+    (_conversations[doctor] ??= []).add(message);
+    notifyListeners();
+  }
+
+  bool isDoctorBlocked(String doctor) => _blockedDoctors.contains(doctor);
+
+  void toggleDoctorBlocked(String doctor) {
+    if (!_blockedDoctors.remove(doctor)) _blockedDoctors.add(doctor);
+    notifyListeners();
+  }
+
+  void clearConversation(String doctor) {
+    _conversations.remove(doctor);
+    notifyListeners();
+  }
+
   final List<CareAppointment> _appointments = [];
   final List<CareNotification> _notifications = [];
   final List<GlucoseReading> _readings = [];
@@ -117,6 +142,8 @@ class CareData extends ChangeNotifier {
   }
 
   void clear() {
+    _conversations.clear();
+    _blockedDoctors.clear();
     _profilePhoto = null;
     _appointments.clear();
     _notifications.clear();

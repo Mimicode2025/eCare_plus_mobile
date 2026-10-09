@@ -9,6 +9,7 @@ import '../profile/profile_page.dart';
 import 'appointments_page.dart';
 import '../../widgets/page_header.dart';
 import '../../widgets/patient_avatar.dart';
+import '../../widgets/doctor_message_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -83,8 +84,8 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 SizedBox(
                   height:
-                      258 +
-                      90 *
+                      268 +
+                      120 *
                           (MediaQuery.textScalerOf(context).scale(14) / 14 - 1)
                               .clamp(0, double.infinity),
                   child: ListView.separated(
@@ -326,7 +327,7 @@ class _DoctorCard extends StatelessWidget {
   const _DoctorCard({required this.doctor});
   @override
   Widget build(BuildContext context) => Container(
-    width: 186,
+    width: 210,
     padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -370,21 +371,27 @@ class _DoctorCard extends StatelessWidget {
           style: AppDecor.t(11, c: AppColors.textMuted),
         ),
         const Spacer(),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+        Row(
+          children: [
+            DoctorMessageButton(doctor: doctor),
+            const SizedBox(width: 6),
+            Expanded(
+              child: FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                onPressed: () =>
+                    showAppointmentForm(context, doctor: doctor.name),
+                icon: const Icon(Icons.calendar_month_outlined, size: 14),
+                label: Text(
+                  'Planifier',
+                  style: AppDecor.t(12, w: FontWeight.w600, c: Colors.white),
+                ),
+              ),
             ),
-            onPressed: () => showAppointmentForm(context, doctor: doctor.name),
-            icon: const Icon(Icons.calendar_month_outlined, size: 16),
-            label: Text(
-              'Planifier',
-              style: AppDecor.t(12, w: FontWeight.w600, c: Colors.white),
-            ),
-          ),
+          ],
         ),
       ],
     ),

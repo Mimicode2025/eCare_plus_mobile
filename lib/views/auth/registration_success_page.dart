@@ -138,7 +138,7 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18)),
                           ),
-                          child: Text('Accéder à mon tableau de bord',
+                          child: Text('Accéder au tableau de bord',
                               style: AppTextStyles.label.copyWith(
                                   color: AppColors.primary,
                                   fontSize: 15.5,

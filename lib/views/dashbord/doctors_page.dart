@@ -3,6 +3,7 @@ import '../../data/doctor_catalog.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
+import '../../widgets/doctor_message_button.dart';
 import 'appointments_page.dart';
 
 class DoctorsPage extends StatefulWidget {
@@ -97,11 +98,21 @@ class _DoctorsPageState extends State<DoctorsPage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    OutlinedButton.icon(
-                      onPressed: () =>
-                          showAppointmentForm(context, doctor: doctor.name),
-                      icon: const Icon(Icons.calendar_month_outlined),
-                      label: const Text('Ajouter à mon agenda'),
+                    Row(
+                      children: [
+                        DoctorMessageButton(doctor: doctor),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => showAppointmentForm(
+                              context,
+                              doctor: doctor.name,
+                            ),
+                            icon: const Icon(Icons.calendar_month_outlined),
+                            label: const Text('Ajouter à mon agenda'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
