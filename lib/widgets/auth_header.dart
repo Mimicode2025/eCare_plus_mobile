@@ -43,7 +43,7 @@ class _AuthHeaderState extends State<AuthHeader>
     return ClipPath(
       clipper: _WaveClipper(),
       child: Container(
-        height: widget.height,
+        constraints: BoxConstraints(minHeight: widget.height),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -63,15 +63,17 @@ class _AuthHeaderState extends State<AuthHeader>
                 builder: (_, _) => CustomPaint(
                   painter: _EcgPainter(
                     Curves.easeInOut.transform(_pulse.value),
-                    widget.height - 92,
                   ),
                 ),
               ),
             ),
             SafeArea(
+              bottom: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(26, 10, 26, 0),
+                // Leave room for the wave and the overlapping form card.
+                padding: const EdgeInsets.fromLTRB(26, 10, 26, 64),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -83,7 +85,13 @@ class _AuthHeaderState extends State<AuthHeader>
                           ),
                           const SizedBox(width: 12),
                         ],
-                        const _LogoMark(),
+                        const Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: _LogoMark(),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 22),
@@ -170,12 +178,12 @@ class _WaveClipper extends CustomClipper<Path> {
 
 class _EcgPainter extends CustomPainter {
   final double t;
-  final double baseY;
-  _EcgPainter(this.t, this.baseY);
+  _EcgPainter(this.t);
 
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
+    final baseY = size.height - 92;
     final p = Path()
       ..moveTo(0, baseY)
       ..lineTo(w * .30, baseY)
