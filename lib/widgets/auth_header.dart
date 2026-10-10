@@ -11,6 +11,7 @@ class AuthHeader extends StatefulWidget {
   final String subtitle;
   final double height;
   final bool showBack;
+  final bool showEcg;
 
   const AuthHeader({
     super.key,
@@ -18,6 +19,7 @@ class AuthHeader extends StatefulWidget {
     required this.subtitle,
     this.height = 300,
     this.showBack = false,
+    this.showEcg = true,
   });
 
   @override
@@ -29,7 +31,13 @@ class _AuthHeaderState extends State<AuthHeader>
   late final AnimationController _pulse = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1900),
-  )..forward();
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.showEcg) _pulse.forward();
+  }
 
   @override
   void dispose() {
@@ -57,16 +65,17 @@ class _AuthHeaderState extends State<AuthHeader>
           children: [
             Positioned(top: -70, right: -50, child: _Orb(size: 220, alpha: 22)),
             Positioned(top: 90, left: -80, child: _Orb(size: 170, alpha: 14)),
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _pulse,
-                builder: (_, _) => CustomPaint(
-                  painter: _EcgPainter(
-                    Curves.easeInOut.transform(_pulse.value),
+            if (widget.showEcg)
+              Positioned.fill(
+                child: AnimatedBuilder(
+                  animation: _pulse,
+                  builder: (_, _) => CustomPaint(
+                    painter: _EcgPainter(
+                      Curves.easeInOut.transform(_pulse.value),
+                    ),
                   ),
                 ),
               ),
-            ),
             SafeArea(
               bottom: false,
               child: Padding(

@@ -5,7 +5,6 @@ import '../../routes/app_routes.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/auth_field.dart';
 import '../../widgets/gradient_button.dart';
-import '../../widgets/social_auth_row.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -74,6 +73,7 @@ class _LoginPageState extends State<LoginPage>
                 title: 'Content de vous\nrevoir !',
                 subtitle: 'Connectez-vous pour poursuivre votre suivi personnalisé.',
                 height: 310,
+                showEcg: false,
               ),
               Center(
                 child: ConstrainedBox(
@@ -164,8 +164,6 @@ class _LoginPageState extends State<LoginPage>
                                 onPressed: _login,
                                 isLoading: _loading,
                               ),
-                              const SizedBox(height: 26),
-                              const SocialAuthRow(),
                             ],
                           ),
                         ),
@@ -182,7 +180,7 @@ class _LoginPageState extends State<LoginPage>
                     alignment: WrapAlignment.center,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text('Nouveau sur eCare+ ?',
+                      Text('Nouveau sur eCare+ ?\n',
                           style: AppTextStyles.body.copyWith(
                               fontSize: 14.5, color: AppColors.textMuted)),
                       TextButton(

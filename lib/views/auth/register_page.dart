@@ -5,7 +5,6 @@ import '../../routes/app_routes.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/auth_field.dart';
 import '../../widgets/gradient_button.dart';
-import '../../widgets/social_auth_row.dart';
 import '../../widgets/legal_consent.dart';
 import '../../services/registration_welcome_service.dart';
 
@@ -120,6 +119,7 @@ class _RegisterPageState extends State<RegisterPage>
                     'Remplissez ce formulaire pour débuter votre accompagnement personnalisé.',
                 height: 330,
                 showBack: true,
+                showEcg: false,
               ),
               Center(
                 child: ConstrainedBox(
@@ -277,8 +277,6 @@ class _RegisterPageState extends State<RegisterPage>
                                 onPressed: _register,
                                 isLoading: _loading,
                               ),
-                              const SizedBox(height: 26),
-                              const SocialAuthRow(title: "ou s'inscrire avec"),
                             ],
                           ),
                         ),
