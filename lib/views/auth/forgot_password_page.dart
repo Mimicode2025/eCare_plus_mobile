@@ -47,6 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       title: 'Mot de passe\noublié ?',
       subtitle: 'Pas de panique, nous vous aidons à retrouver l\'accès.',
       headerHeight: 280,
+      showEcg: false,
       footer: _sent
           ? null
           : TextButton.icon(

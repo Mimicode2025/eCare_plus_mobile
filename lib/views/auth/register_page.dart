@@ -287,28 +287,32 @@ class _RegisterPageState extends State<RegisterPage>
               ),
               Transform.translate(
                 offset: const Offset(0, -34),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text(
-                      'Vous avez déjà un compte ?',
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 14.5,
-                        color: AppColors.textMuted,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        'Connectez-vous',
-                        style: AppTextStyles.link.copyWith(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Vous avez déjà un compte ?',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 14.5,
+                          color: AppColors.textMuted,
                         ),
                       ),
-                    ),
-                  ],
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          'Connectez-vous',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.link.copyWith(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).padding.bottom),

@@ -73,6 +73,7 @@ flutter:
     - lib/data/Docteur1.png
     - lib/data/Docteur 2.png
     - lib/data/Profile.png
+    - lib/data/connection.png
     - lib/data/icon_suivi.png
     - lib/data/icon_document.png
     - lib/data/icon_medicament.png

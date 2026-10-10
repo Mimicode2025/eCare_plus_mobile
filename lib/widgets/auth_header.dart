@@ -28,14 +28,15 @@ class AuthHeader extends StatefulWidget {
 
 class _AuthHeaderState extends State<AuthHeader>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1900),
-  );
+  late final AnimationController _pulse;
 
   @override
   void initState() {
     super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1900),
+    );
     if (widget.showEcg) _pulse.forward();
   }
 

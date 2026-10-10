@@ -19,6 +19,8 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(home: ForgotPasswordPage()),
       );
+      // Wait for the form's delayed entrance now that the ECG is disabled.
+      await tester.pump(const Duration(milliseconds: 350));
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);

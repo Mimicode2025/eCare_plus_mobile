@@ -8,6 +8,7 @@ class AuthLayout extends StatefulWidget {
   final String subtitle;
   final double headerHeight;
   final bool showBack;
+  final bool showEcg;
   final Widget child;
   final Widget? footer;
 
@@ -19,6 +20,7 @@ class AuthLayout extends StatefulWidget {
     this.footer,
     this.headerHeight = 290,
     this.showBack = true,
+    this.showEcg = true,
   });
 
   @override
@@ -31,11 +33,14 @@ class _AuthLayoutState extends State<AuthLayout>
     vsync: this,
     duration: const Duration(milliseconds: 800),
   );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _anim, curve: Curves.easeOut);
-  late final Animation<Offset> _slide =
-      Tween<Offset>(begin: const Offset(0, .08), end: Offset.zero)
-          .animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _anim,
+    curve: Curves.easeOut,
+  );
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: const Offset(0, .08),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
 
   @override
   void initState() {
@@ -67,6 +72,7 @@ class _AuthLayoutState extends State<AuthLayout>
                 subtitle: widget.subtitle,
                 height: widget.headerHeight,
                 showBack: widget.showBack,
+                showEcg: widget.showEcg,
               ),
               Center(
                 child: ConstrainedBox(

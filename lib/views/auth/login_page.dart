@@ -25,11 +25,14 @@ class _LoginPageState extends State<LoginPage>
     vsync: this,
     duration: const Duration(milliseconds: 800),
   );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _anim, curve: Curves.easeOut);
-  late final Animation<Offset> _slide =
-      Tween<Offset>(begin: const Offset(0, .08), end: Offset.zero)
-          .animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _anim,
+    curve: Curves.easeOut,
+  );
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: const Offset(0, .08),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _anim, curve: Curves.easeOutCubic));
 
   @override
   void initState() {
@@ -71,7 +74,8 @@ class _LoginPageState extends State<LoginPage>
             children: [
               const AuthHeader(
                 title: 'Content de vous\nrevoir !',
-                subtitle: 'Connectez-vous pour poursuivre votre suivi personnalisé.',
+                subtitle:
+                    'Connectez-vous pour poursuivre votre suivi personnalisé.',
                 height: 310,
                 showEcg: false,
               ),
@@ -100,6 +104,14 @@ class _LoginPageState extends State<LoginPage>
                           ),
                           child: Column(
                             children: [
+                              Image.asset(
+                                'lib/data/connection.png',
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.contain,
+                                excludeFromSemantics: true,
+                              ),
+                              const SizedBox(height: 20),
                               Form(
                                 key: _formKey,
                                 child: Column(
@@ -111,13 +123,12 @@ class _LoginPageState extends State<LoginPage>
                                       keyboardType: TextInputType.emailAddress,
                                       validator: (v) =>
                                           (v == null || v.trim().isEmpty)
-                                              ? 'Ce champ est obligatoire'
-                                              : null,
+                                          ? 'Ce champ est obligatoire'
+                                          : null,
                                     ),
                                     const SizedBox(height: 16),
                                     AuthField(
                                       label: 'Mot de passe',
-                                      helperText: 'Minimum 8 caractères',
                                       controller: _passwordController,
                                       icon: Icons.lock_outline_rounded,
                                       obscureText: _obscure,
@@ -126,8 +137,9 @@ class _LoginPageState extends State<LoginPage>
                                         tooltip: _obscure
                                             ? 'Afficher le mot de passe'
                                             : 'Masquer le mot de passe',
-                                        onPressed: () =>
-                                            setState(() => _obscure = !_obscure),
+                                        onPressed: () => setState(
+                                          () => _obscure = !_obscure,
+                                        ),
                                         icon: Icon(
                                           _obscure
                                               ? Icons.visibility_off_outlined
@@ -136,10 +148,9 @@ class _LoginPageState extends State<LoginPage>
                                           size: 21,
                                         ),
                                       ),
-                                      validator: (v) =>
-                                          (v == null || v.isEmpty)
-                                              ? 'Ce champ est obligatoire'
-                                              : null,
+                                      validator: (v) => (v == null || v.isEmpty)
+                                          ? 'Ce champ est obligatoire'
+                                          : null,
                                     ),
                                   ],
                                 ),
@@ -148,7 +159,9 @@ class _LoginPageState extends State<LoginPage>
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () => Navigator.pushNamed(
-                                      context, AppRoutes.forgotPassword),
+                                    context,
+                                    AppRoutes.forgotPassword,
+                                  ),
                                   child: Text(
                                     'Mot de passe oublié ?',
                                     style: AppTextStyles.caption.copyWith(
@@ -175,20 +188,29 @@ class _LoginPageState extends State<LoginPage>
               Transform.translate(
                 offset: const Offset(0, -34),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Nouveau sur eCare+ ?\n',
-                          style: AppTextStyles.body.copyWith(
-                              fontSize: 14.5, color: AppColors.textMuted)),
+                      Text(
+                        'Nouveau sur eCare+ ?',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 14.5,
+                          color: AppColors.textMuted,
+                        ),
+                      ),
                       TextButton(
                         onPressed: () =>
                             Navigator.pushNamed(context, AppRoutes.register),
-                        child: Text('Créer un compte',
-                            style: AppTextStyles.link.copyWith(
-                                fontSize: 15, fontWeight: FontWeight.w700)),
+                        child: Text(
+                          'Créer un compte',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.link.copyWith(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ],
                   ),
