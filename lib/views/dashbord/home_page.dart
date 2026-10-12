@@ -383,7 +383,7 @@ class _DoctorCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
                 onPressed: () =>
-                    showAppointmentForm(context, doctor: doctor.name),
+                    openAppointmentsPage(context, doctor: doctor.name),
                 icon: const Icon(Icons.calendar_month_outlined, size: 14),
                 label: Text(
                   'Planifier',

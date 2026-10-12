@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ecare_plus_mobile/services/doctor_contact_service.dart';
 import 'package:ecare_plus_mobile/widgets/doctor_social_links.dart';
+import 'package:provider/provider.dart';
+import 'package:ecare_plus_mobile/models/care_data.dart';
 
 void main() {
   test('Les liens absents ou invalides ne sont pas ouverts', () async {
@@ -75,7 +77,12 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpWidget(
-      MaterialApp(home: DoctorContactPage(doctor: doctorCatalog.first)),
+      ChangeNotifierProvider(
+        create: (_) => CareData(),
+        child: MaterialApp(
+          home: DoctorContactPage(doctor: doctorCatalog.first),
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     expect(find.text('WhatsApp'), findsOneWidget);

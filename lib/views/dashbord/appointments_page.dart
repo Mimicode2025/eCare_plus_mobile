@@ -6,9 +6,31 @@ import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
 import '../../widgets/gradient_button.dart';
 
-class AppointmentsPage extends StatelessWidget {
+class AppointmentsPage extends StatefulWidget {
   final bool showBack;
-  const AppointmentsPage({super.key, this.showBack = true});
+  final String initialDoctor;
+  const AppointmentsPage({
+    super.key,
+    this.showBack = true,
+    this.initialDoctor = '',
+  });
+
+  @override
+  State<AppointmentsPage> createState() => _AppointmentsPageState();
+}
+
+class _AppointmentsPageState extends State<AppointmentsPage> {
+  late bool _adding = widget.initialDoctor.isNotEmpty;
+
+  void _save(CareAppointment appointment) {
+    context.read<CareData>().addAppointment(appointment);
+    setState(() => _adding = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Rendez-vous ajouté à votre agenda personnel.'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +39,29 @@ class AppointmentsPage extends StatelessWidget {
       title: 'Mes rendez-vous',
       subtitle:
           'Organisez vos consultations et retrouvez vos prochains rendez-vous.',
-      showBack: showBack,
+      showBack: widget.showBack,
       child: Column(
         children: [
-          GradientButton(
-            text: 'Ajouter un rendez-vous',
-            onPressed: () => showAppointmentForm(context),
-          ),
+          if (_adding)
+            CareCard(
+              child: Column(
+                children: [
+                  _AppointmentForm(
+                    doctor: widget.initialDoctor,
+                    onSaved: _save,
+                  ),
+                  TextButton(
+                    onPressed: () => setState(() => _adding = false),
+                    child: const Text('Annuler'),
+                  ),
+                ],
+              ),
+            )
+          else
+            GradientButton(
+              text: 'Ajouter un rendez-vous',
+              onPressed: () => setState(() => _adding = true),
+            ),
           const SizedBox(height: 20),
           if (appointments.isEmpty)
             const CareEmpty(
@@ -112,33 +150,22 @@ class AppointmentsPage extends StatelessWidget {
   }
 }
 
-Future<void> showAppointmentForm(
+Future<void> openAppointmentsPage(
   BuildContext context, {
   String doctor = '',
 }) async {
-  final result = await showModalBottomSheet<CareAppointment>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    backgroundColor: AppColors.scaffoldBackground,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+  await Navigator.push<void>(
+    context,
+    MaterialPageRoute<void>(
+      builder: (_) => AppointmentsPage(initialDoctor: doctor),
     ),
-    builder: (_) => _AppointmentForm(doctor: doctor),
   );
-  if (result != null && context.mounted) {
-    context.read<CareData>().addAppointment(result);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Rendez-vous ajouté à votre agenda personnel.'),
-      ),
-    );
-  }
 }
 
 class _AppointmentForm extends StatefulWidget {
   final String doctor;
-  const _AppointmentForm({required this.doctor});
+  final ValueChanged<CareAppointment> onSaved;
+  const _AppointmentForm({required this.doctor, required this.onSaved});
   @override
   State<_AppointmentForm> createState() => _AppointmentFormState();
 }
@@ -157,12 +184,7 @@ class _AppointmentFormState extends State<_AppointmentForm> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.fromLTRB(
-      24,
-      24,
-      24,
-      24 + MediaQuery.viewInsetsOf(context).bottom,
-    ),
+    padding: EdgeInsets.zero,
     child: SingleChildScrollView(
       child: Form(
         key: _form,
@@ -248,8 +270,7 @@ class _AppointmentFormState extends State<_AppointmentForm> {
                   );
                   return;
                 }
-                Navigator.pop(
-                  context,
+                widget.onSaved(
                   CareAppointment(doctor: _doctor.text.trim(), date: date),
                 );
               },

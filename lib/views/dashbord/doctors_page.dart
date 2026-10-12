@@ -224,7 +224,7 @@ class _DoctorDirectoryCard extends StatelessWidget {
                   width: double.infinity,
                   child: TextButton.icon(
                     onPressed: () =>
-                        showAppointmentForm(context, doctor: doctor.name),
+                        openAppointmentsPage(context, doctor: doctor.name),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.primary,
                       minimumSize: const Size(0, 48),

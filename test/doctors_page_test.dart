@@ -60,7 +60,12 @@ void main() {
         addTearDown(tester.view.resetPhysicalSize);
         addTearDown(tester.view.resetDevicePixelRatio);
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-        await tester.pumpWidget(const MaterialApp(home: DoctorsPage()));
+        await tester.pumpWidget(
+          ChangeNotifierProvider(
+            create: (_) => CareData(),
+            child: const MaterialApp(home: DoctorsPage()),
+          ),
+        );
         await tester.pumpAndSettle();
         await tester.ensureVisible(find.text('Ajouter à mon agenda').first);
         await tester.tap(find.text('Ajouter à mon agenda').first);

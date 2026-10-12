@@ -122,7 +122,7 @@ class DoctorContactPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () =>
-                      showAppointmentForm(context, doctor: doctor.name),
+                      openAppointmentsPage(context, doctor: doctor.name),
                   icon: const Icon(Icons.calendar_month_outlined),
                   label: const Text(
                     'Prendre rendez-vous',
