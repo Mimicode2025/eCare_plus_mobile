@@ -9,14 +9,22 @@ import '../../widgets/page_header.dart';
 import '../../widgets/gradient_button.dart';
 import '../../widgets/measurement_chart.dart';
 
+enum FollowUpMode { combined, glucose, bloodPressure }
+
 class FollowUpPage extends StatefulWidget {
-  const FollowUpPage({super.key});
+  final FollowUpMode mode;
+  const FollowUpPage({super.key, this.mode = FollowUpMode.combined});
   @override
   State<FollowUpPage> createState() => _FollowUpPageState();
 }
 
 class _FollowUpPageState extends State<FollowUpPage> {
-  bool _pressure = false;
+  bool _selectedPressure = false;
+  bool get _pressure => switch (widget.mode) {
+    FollowUpMode.combined => _selectedPressure,
+    FollowUpMode.glucose => false,
+    FollowUpMode.bloodPressure => true,
+  };
   int _period = 0;
 
   DateTime _start(DateTime now) {
@@ -61,26 +69,38 @@ class _FollowUpPageState extends State<FollowUpPage> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
               children: [
-                const PageHeader(
-                  title: 'Mon suivi',
-                  subtitle:
+                PageHeader(
+                  title: switch (widget.mode) {
+                    FollowUpMode.combined => 'Mon suivi',
+                    FollowUpMode.glucose => 'Mon suivi glycémie',
+                    FollowUpMode.bloodPressure => 'Mon suivi tension',
+                  },
+                  subtitle: switch (widget.mode) {
+                    FollowUpMode.combined =>
                       'Vos constantes et leur évolution, au même endroit.',
+                    FollowUpMode.glucose =>
+                      'Votre glycémie et son évolution, au même endroit.',
+                    FollowUpMode.bloodPressure =>
+                      'Votre tension artérielle et son évolution, au même endroit.',
+                  },
                 ),
                 const SizedBox(height: 26),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(30),
+                if (widget.mode == FollowUpMode.combined) ...[
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      children: [
+                        _tab('Glycémie', false),
+                        _tab('Tension artérielle', true),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      _tab('Glycémie', false),
-                      _tab('Tension artérielle', true),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 22),
+                  const SizedBox(height: 22),
+                ],
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -281,7 +301,7 @@ class _FollowUpPageState extends State<FollowUpPage> {
       borderRadius: BorderRadius.circular(26),
       child: InkWell(
         borderRadius: BorderRadius.circular(26),
-        onTap: () => setState(() => _pressure = pressure),
+        onTap: () => setState(() => _selectedPressure = pressure),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
           child: Text(

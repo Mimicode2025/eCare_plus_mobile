@@ -22,6 +22,8 @@ import 'views/dashbord/doctors_page.dart';
 import 'views/dashbord/treatments_page.dart';
 import 'views/notification/notifications_page.dart';
 import 'views/measurement/follow_up_page.dart';
+import 'views/measurement/glucose_follow_up_page.dart';
+import 'views/measurement/blood_pressure_follow_up_page.dart';
 import 'views/error/page_not_found_page.dart';
 import 'views/error/no_connection_page.dart';
 import 'views/legal/privacy_policy_page.dart';
@@ -73,6 +75,9 @@ class ECarePlusApp extends StatelessWidget {
           AppRoutes.appointments: (_) => const AppointmentsPage(),
           AppRoutes.notifications: (_) => const NotificationsPage(),
           AppRoutes.followUp: (_) => const FollowUpPage(),
+          AppRoutes.glucoseFollowUp: (_) => const GlucoseFollowUpPage(),
+          AppRoutes.bloodPressureFollowUp: (_) =>
+              const BloodPressureFollowUpPage(),
           AppRoutes.documents: (_) => const DocumentsPage(),
           AppRoutes.doctors: (_) => const DoctorsPage(),
           AppRoutes.treatments: (_) => const TreatmentsPage(),

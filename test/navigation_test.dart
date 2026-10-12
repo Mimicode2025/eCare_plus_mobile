@@ -45,7 +45,7 @@ void main() {
     expect(find.text('Mes rendez-vous'), findsOneWidget);
     await tester.tap(find.text('Articles').last);
     await tester.pumpAndSettle();
-    expect(find.text('Articles des médecins'), findsOneWidget);
+    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
     await tester.tap(find.text('Paramètres').last);
     await tester.pumpAndSettle();
     expect(find.text('Mon compte'), findsOneWidget);
@@ -90,7 +90,7 @@ void main() {
     expect(find.text('Accueil').hitTestable(), findsOneWidget);
     await tester.tap(find.text('Articles').last);
     await tester.pumpAndSettle();
-    expect(find.text('Articles des médecins'), findsOneWidget);
+    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 3));
