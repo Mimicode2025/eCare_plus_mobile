@@ -68,7 +68,22 @@ void main() {
         ),
       );
       final button = find.text(entry.key).first;
-      await tester.ensureVisible(button);
+      if (entry.key == 'Planifier') {
+        for (
+          var attempt = 0;
+          attempt < 6 && button.hitTestable().evaluate().isEmpty;
+          attempt++
+        ) {
+          await tester.drag(
+            find.byKey(const PageStorageKey('home-scroll')),
+            const Offset(0, -180),
+          );
+          await tester.pumpAndSettle();
+        }
+        expect(button.hitTestable(), findsOneWidget);
+      } else {
+        await tester.ensureVisible(button);
+      }
       await tester.tap(button);
       await tester.pumpAndSettle();
       expect(find.text('Mes rendez-vous'), findsOneWidget);

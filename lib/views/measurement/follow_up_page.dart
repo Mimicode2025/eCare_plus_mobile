@@ -318,30 +318,36 @@ class _FollowUpPageState extends State<FollowUpPage> {
     ),
   );
 
-  Future<void> _addMeasurement() async {
-    final result = await showModalBottomSheet<_MeasurementInput>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: AppColors.scaffoldBackground,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      builder: (_) => _MeasurementForm(pressure: _pressure),
-    );
-    if (result != null && mounted) {
-      final data = context.read<CareData>();
-      if (result.secondary == null) {
-        data.addReading(result.primary, date: result.date);
-      } else {
-        data.addBloodPressure(
-          result.primary,
-          result.secondary!,
-          date: result.date,
-        );
-      }
-    }
+  Future<void> _addMeasurement() =>
+      showMeasurementSheet(context, pressure: _pressure);
+}
+
+/// Shared entry point for the follow-up page and the central navigation action.
+Future<void> showMeasurementSheet(
+  BuildContext context, {
+  bool? pressure,
+}) async {
+  final data = context.read<CareData>();
+  final result = await showModalBottomSheet<_MeasurementInput>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    showDragHandle: true,
+    backgroundColor: AppColors.scaffoldBackground,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    ),
+    builder: (_) => _MeasurementForm(pressure: pressure),
+  );
+  if (result == null || !context.mounted) return;
+  if (result.secondary == null) {
+    data.addReading(result.primary, date: result.date);
+  } else {
+    data.addBloodPressure(result.primary, result.secondary!, date: result.date);
   }
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(const SnackBar(content: Text('Constante enregistrée')));
 }
 
 class _MeasurementInput {
@@ -352,13 +358,14 @@ class _MeasurementInput {
 }
 
 class _MeasurementForm extends StatefulWidget {
-  final bool pressure;
-  const _MeasurementForm({required this.pressure});
+  final bool? pressure;
+  const _MeasurementForm({this.pressure});
   @override
   State<_MeasurementForm> createState() => _MeasurementFormState();
 }
 
 class _MeasurementFormState extends State<_MeasurementForm> {
+  late bool _pressure = widget.pressure ?? false;
   final _form = GlobalKey<FormState>();
   final _primary = TextEditingController();
   final _secondary = TextEditingController();
@@ -405,14 +412,40 @@ class _MeasurementFormState extends State<_MeasurementForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.pressure
+            widget.pressure == null
+                ? 'Ajouter une constante'
+                : _pressure
                 ? 'Nouvelle tension artérielle'
                 : 'Nouvelle glycémie',
             style: AppDecor.t(20, w: FontWeight.w700),
           ),
+          if (widget.pressure == null) ...[
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final pressure in [false, true])
+                  ChoiceChip(
+                    label: Text(pressure ? 'Tension artérielle' : 'Glycémie'),
+                    selected: _pressure == pressure,
+                    onSelected: pressure == _pressure
+                        ? null
+                        : (_) => setState(() {
+                            _pressure = pressure;
+                            _primary.clear();
+                            _secondary.clear();
+                            _error = null;
+                            _form.currentState?.reset();
+                          }),
+                  ),
+              ],
+            ),
+          ],
           const SizedBox(height: 22),
           Image.asset(
-            widget.pressure
+            _pressure
                 ? 'lib/data/ajout_tension.png'
                 : 'lib/data/ajout_glycemie.png',
             height: 150,
@@ -423,10 +456,10 @@ class _MeasurementFormState extends State<_MeasurementForm> {
           const SizedBox(height: 22),
           _field(
             _primary,
-            widget.pressure ? 'Systolique' : 'Glycémie',
-            widget.pressure ? 'mmHg' : 'mg/dL',
+            _pressure ? 'Systolique' : 'Glycémie',
+            _pressure ? 'mmHg' : 'mg/dL',
           ),
-          if (widget.pressure) ...[
+          if (_pressure) ...[
             const SizedBox(height: 16),
             _field(_secondary, 'Diastolique', 'mmHg'),
           ],
@@ -499,7 +532,7 @@ class _MeasurementFormState extends State<_MeasurementForm> {
                 );
                 return;
               }
-              if (widget.pressure &&
+              if (_pressure &&
                   _parse(_primary.text)! <= _parse(_secondary.text)!) {
                 setState(
                   () => _error =
@@ -511,7 +544,7 @@ class _MeasurementFormState extends State<_MeasurementForm> {
                 context,
                 _MeasurementInput(
                   _parse(_primary.text)!,
-                  widget.pressure ? _parse(_secondary.text)! : null,
+                  _pressure ? _parse(_secondary.text)! : null,
                   _date,
                 ),
               );

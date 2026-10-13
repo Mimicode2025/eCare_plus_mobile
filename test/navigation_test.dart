@@ -1,4 +1,5 @@
 import 'package:ecare_plus_mobile/main.dart';
+import 'package:ecare_plus_mobile/widgets/raised_navigation_bar.dart';
 import 'package:ecare_plus_mobile/views/onbording/splash_screen.dart';
 import 'package:ecare_plus_mobile/views/dashbord/home_page.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,23 @@ Future<void> openHome(WidgetTester tester) async {
     tester.element(find.byType(SplashScreen)),
   ).pushReplacementNamed('/home');
   await tester.pumpAndSettle();
+}
+
+Future<void> tapHomeShortcut(WidgetTester tester, String label) async {
+  final target = find.text(label).first;
+  for (
+    var attempt = 0;
+    attempt < 6 && target.hitTestable().evaluate().isEmpty;
+    attempt++
+  ) {
+    await tester.drag(
+      find.byKey(const PageStorageKey('home-scroll')),
+      const Offset(0, -160),
+    );
+    await tester.pumpAndSettle();
+  }
+  expect(target.hitTestable(), findsOneWidget);
+  await tester.tap(target);
 }
 
 void main() {
@@ -39,7 +57,7 @@ void main() {
   });
   testWidgets('Footer opens all four destinations', (tester) async {
     await openHome(tester);
-    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(RaisedNavigationBar), findsOneWidget);
     await tester.tap(find.text('Rendez-vous').last);
     await tester.pumpAndSettle();
     expect(find.text('Mes rendez-vous'), findsOneWidget);
@@ -66,7 +84,7 @@ void main() {
     expect(find.text('Mes notifications'), findsOneWidget);
     await tester.tap(find.byTooltip('Retour'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Suivi').first);
+    await tapHomeShortcut(tester, 'Suivi');
     await tester.pumpAndSettle();
     expect(find.text('Mon suivi'), findsOneWidget);
     expect(tester.takeException(), isNull);
@@ -100,7 +118,7 @@ void main() {
     tester,
   ) async {
     await openHome(tester);
-    await tester.tap(find.text('Suivi').first);
+    await tapHomeShortcut(tester, 'Suivi');
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Ajouter une mesure'));
     await tester.pumpAndSettle();
@@ -128,7 +146,7 @@ void main() {
     tester,
   ) async {
     await openHome(tester);
-    await tester.tap(find.text('Documents'));
+    await tapHomeShortcut(tester, 'Documents');
     await tester.pumpAndSettle();
     expect(find.text('Mes documents'), findsOneWidget);
     await tester.tap(find.byTooltip('Retour'));

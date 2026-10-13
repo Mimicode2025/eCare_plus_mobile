@@ -25,25 +25,35 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
     children: [
       Positioned(
-        top: -100,
-        right: -80,
+        top: -95,
+        right: -65,
         child: Container(
-          width: 270,
-          height: 270,
-          decoration: const BoxDecoration(
-            color: AppColors.primaryLighter,
+          width: 290,
+          height: 290,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [Color(0xFFBCD9F5), Color(0xFFDCEBFA)],
+            ),
+            border: Border.all(color: const Color(0xFFC5DFF5)),
             shape: BoxShape.circle,
           ),
         ),
       ),
       Positioned(
-        top: 345,
-        left: -115,
+        top: 315,
+        left: -100,
         child: Container(
-          width: 250,
-          height: 250,
+          width: 260,
+          height: 260,
           decoration: BoxDecoration(
-            color: AppColors.primaryLight.withValues(alpha: .45),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFC9E6F3), Color(0xFFE2F1F8)],
+            ),
+            border: Border.all(color: const Color(0xFFCAE4F0)),
             shape: BoxShape.circle,
           ),
         ),
@@ -63,6 +73,8 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 22),
                 const _WelcomeCard(),
                 const SizedBox(height: 24),
+                Text('Accès rapide', style: AppDecor.t(16, w: FontWeight.w700)),
+                const SizedBox(height: 12),
                 const _QuickActions(),
                 const SizedBox(height: 26),
                 Row(
@@ -164,9 +176,12 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Material(
     color: Colors.white,
-    borderRadius: BorderRadius.circular(28),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(22),
+      side: const BorderSide(color: Color(0xFFDCE6F2)),
+    ),
     child: InkWell(
-      borderRadius: BorderRadius.circular(28),
+      borderRadius: BorderRadius.circular(22),
       onTap: () => Navigator.pushNamed(context, AppRoutes.doctors),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
@@ -200,12 +215,21 @@ class _WelcomeCard extends StatelessWidget {
   const _WelcomeCard();
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.fromLTRB(20, 20, 8, 20),
+    padding: const EdgeInsets.fromLTRB(20, 24, 16, 24),
     decoration: BoxDecoration(
-      color: Colors.white,
+      gradient: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFF154D85), Color(0xFF2476B6)],
+      ),
       borderRadius: BorderRadius.circular(24),
-      border: Border.all(color: AppColors.border),
-      boxShadow: AppDecor.shadow(.06),
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.navigationBlue.withValues(alpha: .18),
+          blurRadius: 20,
+          offset: const Offset(0, 8),
+        ),
+      ],
     ),
     child: Row(
       children: [
@@ -213,21 +237,32 @@ class _WelcomeCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Bienvenue', style: AppDecor.t(21, w: FontWeight.w700)),
-              const SizedBox(height: 8),
+              Text(
+                'Bienvenue',
+                style: AppDecor.t(21, w: FontWeight.w700, c: Colors.white),
+              ),
+              const SizedBox(height: 10),
               Text(
                 'Votre suivi médical\ncommence ici.',
-                style: AppDecor.t(13, c: AppColors.textMuted, h: 1.6),
+                style: AppDecor.t(13, c: const Color(0xFFE2EFFA), h: 1.6),
               ),
             ],
           ),
         ),
-        const SizedBox(width: 4),
-        Image.asset(
-          'assets/images/ecareImage1.png',
-          width: 112,
-          height: 130,
-          fit: BoxFit.contain,
+        const SizedBox(width: 12),
+        Container(
+          width: 104,
+          height: 124,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Image.asset(
+            'assets/images/ecareImage1.png',
+            fit: BoxFit.contain,
+            excludeFromSemantics: true,
+          ),
         ),
       ],
     ),
@@ -278,7 +313,10 @@ class _QuickActions extends StatelessWidget {
           width: 100 + 50 * textGrowth,
           child: Material(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(22),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(22),
+              side: const BorderSide(color: Color(0xFFDCE6F2)),
+            ),
             child: InkWell(
               borderRadius: BorderRadius.circular(22),
               onTap: () => Navigator.pushNamed(context, items[index].$3),
@@ -288,7 +326,12 @@ class _QuickActions extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLighter,
+                      color: [
+                        const Color(0xFFD3E6F8),
+                        const Color(0xFFE9EFFB),
+                        const Color(0xFFE3F3F0),
+                        const Color(0xFFE8F2FC),
+                      ][index],
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Image.asset(

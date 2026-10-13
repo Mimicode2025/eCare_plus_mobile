@@ -6,6 +6,8 @@ class AppColors {
   static const Color primaryLight = Color(0xFFD9E8F5);
   static const Color primaryLighter = Color(0xFFE6F2FC);
 
+  static const Color navigationBlue = Color(0xFF1762A7);
+
   // Textes
   static const Color textDark = Color(0xFF0D1B2A);
   static const Color textMuted = Color(0xFF5A6E85);
