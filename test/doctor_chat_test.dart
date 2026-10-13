@@ -14,6 +14,24 @@ Future<void> openDoctors(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets(
+    'Chat opens with clearly labelled examples without a demonstration banner',
+    (tester) async {
+      await openDoctors(tester);
+      await tester.tap(find.byTooltip('Message à Dr Johnson Mike'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Mode démonstration'), findsNothing);
+      expect(
+        find.text('Bonjour, comment vous sentez-vous aujourd’hui ?'),
+        findsNothing,
+      );
+      expect(find.text('Exemple de message'), findsNWidgets(2));
+      expect(find.byTooltip('Prendre une photo'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(seconds: 3));
+    },
+  );
+
   testWidgets('Empty composer stays compact on a phone with enlarged text', (
     tester,
   ) async {
@@ -40,82 +58,6 @@ void main() {
     expect(tester.getSize(input).height, initialHeight);
     expect(tester.takeException(), isNull);
   });
-  testWidgets(
-    'Composer offers emojis and camera preview without losing draft',
-    (tester) async {
-      await openDoctors(tester);
-      await tester.tap(find.byTooltip('Message à Dr Johnson Mike'));
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField).last, 'Bonjour ');
-      await tester.pump();
-      await tester.tap(find.byTooltip('Choisir un emoji'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('🙂'));
-      await tester.pumpAndSettle();
-      expect(
-        tester.widget<TextField>(find.byType(TextField).last).controller!.text,
-        'Bonjour 🙂',
-      );
-      await tester.tap(find.byTooltip('Aperçu caméra'));
-      await tester.pumpAndSettle();
-      expect(
-        find.text('La caméra n’est pas activée dans cette démonstration.'),
-        findsOneWidget,
-      );
-      await tester.ensureVisible(find.text('Ajouter l’aperçu'));
-      await tester.tap(find.text('Ajouter l’aperçu'));
-      await tester.pumpAndSettle();
-      expect(find.text('Photo de démonstration'), findsOneWidget);
-      expect(
-        tester.widget<TextField>(find.byType(TextField).last).controller!.text,
-        'Bonjour 🙂',
-      );
-      expect(tester.takeException(), isNull);
-    },
-  );
-  testWidgets('Attaching a preview preserves an unsent text draft', (
-    tester,
-  ) async {
-    await openDoctors(tester);
-    await tester.tap(find.byTooltip('Message à Dr Johnson Mike'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField).last, 'Mon brouillon');
-    await tester.pump();
-    await tester.tap(find.byTooltip('Joindre un fichier'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Document'));
-    await tester.pumpAndSettle();
-    expect(find.text('Document de démonstration'), findsOneWidget);
-    expect(
-      tester.widget<TextField>(find.byType(TextField).last).controller!.text,
-      'Mon brouillon',
-    );
-  });
-  testWidgets('Voice preview can be cancelled, sent and paused', (
-    tester,
-  ) async {
-    await openDoctors(tester);
-    await tester.tap(find.byTooltip('Message à Dr Johnson Mike'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Message vocal'));
-    await tester.pump(const Duration(seconds: 3));
-    expect(find.text('0:03'), findsOneWidget);
-    await tester.tap(find.byTooltip('Annuler le vocal'));
-    await tester.pumpAndSettle();
-    expect(find.byTooltip('Envoyer le vocal'), findsNothing);
-    await tester.tap(find.byTooltip('Message vocal'));
-    await tester.pump(const Duration(seconds: 3));
-    await tester.tap(find.byTooltip('Envoyer le vocal'));
-    await tester.pumpAndSettle();
-    expect(find.text('0:00 / 0:03 · Aperçu'), findsOneWidget);
-    await tester.tap(find.byTooltip('Lire le vocal simulé').last);
-    await tester.pump(const Duration(seconds: 1));
-    await tester.tap(find.byTooltip('Pause du vocal simulé'));
-    await tester.pumpAndSettle();
-    expect(find.text('0:01 / 0:03 · Aperçu'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
-
   testWidgets('Contact profile and both call previews are reachable', (
     tester,
   ) async {
@@ -185,7 +127,7 @@ void main() {
     expect(find.text('Aucun message trouvé'), findsOneWidget);
     await tester.tap(find.byTooltip('Fermer la recherche'));
     await tester.pumpAndSettle();
-    expect(find.text('Exemple de conversation'), findsOneWidget);
+    expect(find.text('Exemple de message'), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'chat_media_service.dart';
 
 class ProfilePhotoTooLargeException implements Exception {
   const ProfilePhotoTooLargeException();
@@ -26,6 +28,8 @@ class ProfilePhotoService {
   static Future<Uint8List?> recoverPhoto() async {
     if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return null;
     try {
+      final prefs = await SharedPreferences.getInstance();
+      if (prefs.containsKey(ChatMediaService.pendingPhotoKey)) return null;
       final response = await ImagePicker().retrieveLostData();
       final files = response.files;
       if (files == null || files.isEmpty) return null;

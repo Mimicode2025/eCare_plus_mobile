@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/care_data.dart';
 import 'services/profile_photo_service.dart';
+import 'services/chat_media_service.dart';
 import 'widgets/main_shell.dart';
 import 'utils/app_colors.dart';
 import 'routes/app_routes.dart';
@@ -32,8 +33,11 @@ import 'views/legal/terms_of_use_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final data = CareData();
+  // Profile recovery must run before consuming the chat marker.
   final photo = await ProfilePhotoService.recoverPhoto();
   if (photo != null) data.setProfilePhoto(photo);
+  final chatPhoto = await ChatMediaService.recoverPhoto();
+  if (chatPhoto != null) data.addDoctorMessage(chatPhoto.$1, chatPhoto.$2);
   runApp(ECarePlusApp(initialData: data));
 }
 

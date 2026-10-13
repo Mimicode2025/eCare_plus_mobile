@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Prenez une photo pour la joindre à votre conversation eCARE+.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Enregistrez un message vocal dans votre conversation eCARE+.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Choisissez une photo pour personnaliser votre profil eCARE+.</string>
+	<string>Choisissez une photo pour votre profil ou votre conversation eCARE+.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
