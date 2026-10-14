@@ -4,6 +4,7 @@ import '../../data/article_catalog.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/article_cover.dart';
+import '../../widgets/page_header.dart';
 
 const _editorialBlue = AppColors.primary;
 
@@ -109,7 +110,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
         )
         .toList();
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFD),
+      backgroundColor: AppColors.scaffoldBackground,
       body: SafeArea(
         bottom: false,
         child: Center(
@@ -117,40 +118,21 @@ class _ArticlesPageState extends State<ArticlesPage> {
             constraints: const BoxConstraints(maxWidth: 680),
             child: ListView(
               key: const PageStorageKey('articles-scroll'),
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'LE JOURNAL ECARE+',
-                            style: AppDecor.t(
-                              10,
-                              w: FontWeight.w700,
-                              c: _editorialBlue,
-                            ).copyWith(letterSpacing: 1.8),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Articles',
-                            style: AppDecor.t(
-                              30,
-                              w: FontWeight.w700,
-                              h: 1.2,
-                            ).copyWith(letterSpacing: -1),
-                          ),
-                        ],
-                      ),
-                    ),
-                    DecoratedBox(
+                PageHeader(
+                  title: 'Articles',
+                  subtitle: 'Un peu de lecture. Beaucoup pour vous.',
+                  showBack: false,
+                  action: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: _favoritesOnly
                             ? AppColors.primaryLighter
                             : Colors.white,
-                        borderRadius: BorderRadius.circular(17),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: AppColors.border),
                       ),
                       child: IconButton(
@@ -171,14 +153,9 @@ class _ArticlesPageState extends State<ArticlesPage> {
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Un peu de lecture. Beaucoup pour vous.',
-                  style: AppDecor.t(13, c: AppColors.textMuted),
-                ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 26),
                 TextField(
                   controller: _search,
                   onChanged: (_) => setState(() {}),
@@ -539,13 +516,23 @@ class _ArticlesPageState extends State<ArticlesPage> {
 class _SaveButton extends StatelessWidget {
   final bool saved;
   final VoidCallback onPressed;
-  const _SaveButton({required this.saved, required this.onPressed});
+  final bool header;
+  const _SaveButton({
+    required this.saved,
+    required this.onPressed,
+    this.header = false,
+  });
   @override
   Widget build(BuildContext context) => IconButton(
     tooltip: saved ? 'Retirer des favoris' : 'Enregistrer cet article',
     onPressed: onPressed,
     style: IconButton.styleFrom(
       backgroundColor: Colors.white.withValues(alpha: .9),
+      minimumSize: header ? const Size(48, 48) : null,
+      shape: header
+          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+          : null,
+      side: header ? const BorderSide(color: AppColors.border) : null,
     ),
     icon: Icon(
       saved ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
@@ -645,101 +632,95 @@ class _ArticleReaderState extends State<_ArticleReader> {
   Widget build(BuildContext context) {
     final article = widget.article;
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFD),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF8FAFD),
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          'Aperçu éditorial',
-          style: AppDecor.t(15, w: FontWeight.w600),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: _SaveButton(
-              saved: widget.isSaved(),
-              onPressed: () async {
-                if (_saving) return;
-                _saving = true;
-                await widget.onSave();
-                if (mounted) setState(() => _saving = false);
-              },
-            ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 680),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(22, 12, 22, 32),
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(26),
-                child: SizedBox(
-                  height: 220,
-                  child: ArticleCover(article: article),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                article.category.toUpperCase(),
-                style: AppDecor.t(
-                  11,
-                  w: FontWeight.w700,
-                  c: article.textAccent,
-                ).copyWith(letterSpacing: 1.5),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                article.title,
-                style: AppDecor.t(27, w: FontWeight.w700, h: 1.3),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Équipe Ecare+ · Contenu de démonstration',
-                style: AppDecor.t(11, c: AppColors.textMuted),
-              ),
-              const SizedBox(height: 24),
-              Text(article.introduction, style: AppDecor.t(15, h: 1.8)),
-              const SizedBox(height: 26),
-              Text(
-                'Dans cet article à venir',
-                style: AppDecor.t(18, w: FontWeight.w600),
-              ),
-              const SizedBox(height: 12),
-              for (final topic in article.topics)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 4),
-                        child: Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 18,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(child: Text(topic, style: AppDecor.t(14))),
-                    ],
+      backgroundColor: AppColors.scaffoldBackground,
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              children: [
+                PageHeader(
+                  title: 'Aperçu éditorial',
+                  action: _SaveButton(
+                    header: true,
+                    saved: widget.isSaved(),
+                    onPressed: () async {
+                      if (_saving) return;
+                      _saving = true;
+                      await widget.onSave();
+                      if (mounted) setState(() => _saving = false);
+                    },
                   ),
                 ),
-              const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLighter,
-                  borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 26),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(26),
+                  child: SizedBox(
+                    height: 220,
+                    child: ArticleCover(article: article),
+                  ),
                 ),
-                child: Text(
-                  'Vous consultez un aperçu de la future bibliothèque. Le contenu complet, son auteur et sa durée de lecture apparaîtront lors de la publication.',
-                  style: AppDecor.t(12, c: const Color(0xFF42718C)),
+                const SizedBox(height: 24),
+                Text(
+                  article.category.toUpperCase(),
+                  style: AppDecor.t(
+                    11,
+                    w: FontWeight.w700,
+                    c: article.textAccent,
+                  ).copyWith(letterSpacing: 1.5),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  article.title,
+                  style: AppDecor.t(27, w: FontWeight.w700, h: 1.3),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Équipe Ecare+ · Contenu de démonstration',
+                  style: AppDecor.t(11, c: AppColors.textMuted),
+                ),
+                const SizedBox(height: 24),
+                Text(article.introduction, style: AppDecor.t(15, h: 1.8)),
+                const SizedBox(height: 26),
+                Text(
+                  'Dans cet article à venir',
+                  style: AppDecor.t(18, w: FontWeight.w600),
+                ),
+                const SizedBox(height: 12),
+                for (final topic in article.topics)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(child: Text(topic, style: AppDecor.t(14))),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLighter,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'Vous consultez un aperçu de la future bibliothèque. Le contenu complet, son auteur et sa durée de lecture apparaîtront lors de la publication.',
+                    style: AppDecor.t(12, c: const Color(0xFF42718C)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -39,7 +39,8 @@ void main() {
       expect(find.text('Aperçu éditorial'), findsOneWidget);
       await tester.tap(find.byTooltip('Enregistrer cet article').last);
       await tester.pumpAndSettle();
-      await tester.pageBack();
+      await tester.ensureVisible(find.byTooltip('Retour'));
+      await tester.tap(find.byTooltip('Retour'));
       await tester.pumpAndSettle();
       await tester.pumpWidget(const SizedBox());
       await open(tester);
