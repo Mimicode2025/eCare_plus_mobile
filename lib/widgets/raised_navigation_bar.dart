@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_decor.dart';
@@ -22,13 +23,17 @@ class RaisedNavigationBar extends StatelessWidget {
   }) : assert(selectedIndex >= 0 && selectedIndex < 4);
 
   static const _destinations = [
-    _Destination('Accueil', Icons.home_outlined, Icons.home_rounded),
+    _Destination(
+      'Accueil',
+      CupertinoIcons.house_alt,
+      CupertinoIcons.house_alt_fill,
+    ),
     _Destination(
       'Rendez-vous',
       Icons.calendar_month_outlined,
       Icons.calendar_month_rounded,
     ),
-    _Destination('Articles', Icons.article_outlined, Icons.article_rounded),
+    _Destination('Articles', CupertinoIcons.book, CupertinoIcons.book_fill),
     _Destination('Paramètres', Icons.settings_outlined, Icons.settings_rounded),
   ];
 

@@ -10,6 +10,8 @@ import '../../models/doctor_message.dart';
 import '../../utils/app_colors.dart';
 import '../../widgets/page_header.dart';
 import '../../widgets/recording_waveform.dart';
+import '../../widgets/chat_menu_entry.dart';
+import '../../utils/app_decor.dart';
 import 'doctor_call_page.dart';
 import 'doctor_contact_page.dart';
 
@@ -231,25 +233,100 @@ class _DoctorChatPageState extends State<DoctorChatPage>
     final kind = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
       builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text('Joindre un fichier'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.image_outlined),
-              title: const Text('Photo'),
-              onTap: () => Navigator.pop(context, 'photo'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.description_outlined),
-              title: const Text('Document'),
-              onTap: () => Navigator.pop(context, 'document'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Joindre un fichier',
+                      style: AppDecor.t(
+                        20,
+                        w: FontWeight.w700,
+                        c: AppColors.primaryDeep,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Fermer',
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'Choisissez ce que vous souhaitez joindre à la conversation.',
+                style: AppDecor.t(12, c: AppColors.textMuted, h: 1.5),
+              ),
+              const SizedBox(height: 18),
+              Material(
+                color: AppColors.scaffoldBackground,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  side: const BorderSide(color: AppColors.border),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      title: const ChatMenuEntry(
+                        icon: Icons.photo_library_outlined,
+                        title: 'Photo',
+                        subtitle: 'Choisir une image dans la galerie',
+                      ),
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                      onTap: () => Navigator.pop(context, 'photo'),
+                    ),
+                    const Divider(
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                      color: AppColors.border,
+                    ),
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      title: const ChatMenuEntry(
+                        icon: Icons.description_outlined,
+                        title: 'Document',
+                        subtitle: 'Choisir un fichier sur cet appareil',
+                      ),
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                      onTap: () => Navigator.pop(context, 'document'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -477,45 +554,106 @@ class _DoctorChatPageState extends State<DoctorChatPage>
           actions: [
             PopupMenuButton<bool>(
               tooltip: 'Appeler',
+              color: Colors.white,
+              surfaceTintColor: Colors.transparent,
+              elevation: 6,
+              shadowColor: AppColors.primaryDeep.withValues(alpha: .16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: AppColors.border),
+              ),
+              constraints: const BoxConstraints(minWidth: 230, maxWidth: 280),
+              position: PopupMenuPosition.under,
               enabled: !blocked,
               icon: const Icon(Icons.call_outlined),
               onSelected: _call,
               itemBuilder: (_) => const [
-                PopupMenuItem(
-                  value: false,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(Icons.call_outlined),
-                    title: Text('Appel audio'),
+                PopupMenuItem<bool>(
+                  enabled: false,
+                  height: 34,
+                  child: Text(
+                    'Choisir le type d’appel',
+                    style: TextStyle(fontSize: 11, color: AppColors.textMuted),
                   ),
                 ),
                 PopupMenuItem(
+                  value: false,
+                  child: ChatMenuEntry(
+                    icon: Icons.call_outlined,
+                    title: 'Appel audio',
+                  ),
+                ),
+                PopupMenuDivider(height: 8),
+                PopupMenuItem(
                   value: true,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: Icon(Icons.videocam_outlined),
-                    title: Text('Appel vidéo'),
+                  child: ChatMenuEntry(
+                    icon: Icons.videocam_outlined,
+                    title: 'Appel vidéo',
                   ),
                 ),
               ],
             ),
             PopupMenuButton<String>(
               tooltip: 'Options de la conversation',
+              color: Colors.white,
+              surfaceTintColor: Colors.transparent,
+              elevation: 6,
+              shadowColor: AppColors.primaryDeep.withValues(alpha: .16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(color: AppColors.border),
+              ),
+              constraints: const BoxConstraints(minWidth: 230, maxWidth: 280),
+              position: PopupMenuPosition.under,
+              icon: const Icon(Icons.more_vert_rounded),
               onSelected: _menu,
               itemBuilder: (_) => [
+                const PopupMenuItem<String>(
+                  enabled: false,
+                  height: 34,
+                  child: Text(
+                    'Conversation',
+                    style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                  ),
+                ),
                 const PopupMenuItem(
                   value: 'contact',
-                  child: Text('Afficher le contact'),
+                  child: ChatMenuEntry(
+                    icon: Icons.person_outline_rounded,
+                    title: 'Afficher le contact',
+                  ),
                 ),
-                const PopupMenuItem(value: 'search', child: Text('Rechercher')),
-                const PopupMenuItem(value: 'report', child: Text('Signaler')),
+                const PopupMenuItem(
+                  value: 'search',
+                  child: ChatMenuEntry(
+                    icon: Icons.search_rounded,
+                    title: 'Rechercher',
+                  ),
+                ),
+                const PopupMenuDivider(height: 12),
+                const PopupMenuItem(
+                  value: 'report',
+                  child: ChatMenuEntry(
+                    icon: Icons.flag_outlined,
+                    title: 'Signaler',
+                  ),
+                ),
                 PopupMenuItem(
                   value: 'block',
-                  child: Text(blocked ? 'Débloquer' : 'Bloquer'),
+                  child: ChatMenuEntry(
+                    icon: blocked
+                        ? Icons.lock_open_rounded
+                        : Icons.block_rounded,
+                    title: blocked ? 'Débloquer' : 'Bloquer',
+                  ),
                 ),
                 const PopupMenuItem(
                   value: 'clear',
-                  child: Text('Effacer mes messages'),
+                  child: ChatMenuEntry(
+                    icon: Icons.delete_outline_rounded,
+                    title: 'Effacer mes messages',
+                    caution: true,
+                  ),
                 ),
               ],
             ),
