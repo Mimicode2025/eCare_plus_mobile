@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
+import '../utils/app_decor.dart';
 import '../utils/app_text_styles.dart';
 
 class GradientButton extends StatelessWidget {
@@ -21,9 +22,7 @@ class GradientButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, Color(0xFF3BBFF3)],
-        ),
+        gradient: AppDecor.buttonGradient,
         boxShadow: [
           BoxShadow(
             color: AppColors.primary.withAlpha(90),
@@ -43,7 +42,9 @@ class GradientButton extends StatelessWidget {
                     width: 24,
                     height: 24,
                     child: CircularProgressIndicator(
-                        strokeWidth: 2.6, color: Colors.white),
+                      strokeWidth: 2.6,
+                      color: Colors.white,
+                    ),
                   )
                 : Text(
                     text,

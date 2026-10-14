@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
+import '../utils/app_decor.dart';
 import '../utils/app_text_styles.dart';
 
 /// Bouton principal pleine largeur avec coins arrondis
@@ -23,8 +24,10 @@ class PrimaryButton extends StatelessWidget {
       width: width ?? double.infinity,
       height: 52,
       child: ElevatedButton(
+        clipBehavior: Clip.antiAlias,
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
+          backgroundBuilder: AppDecor.buttonBackground,
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,

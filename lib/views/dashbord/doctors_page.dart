@@ -167,7 +167,9 @@ class _DoctorDirectoryCard extends StatelessWidget {
                   child: Tooltip(
                     message: 'Message à ${doctor.name}',
                     child: FilledButton.icon(
+                      clipBehavior: Clip.antiAlias,
                       style: FilledButton.styleFrom(
+                        backgroundBuilder: AppDecor.buttonBackground,
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(0, 46),

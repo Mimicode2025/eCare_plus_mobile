@@ -78,10 +78,10 @@ void main() {
       });
     }
 
-    await capture('dashboard-v3-accueil');
+    await capture('palette-blue-accueil');
     await tester.tap(find.byTooltip('Ajouter mes constantes'));
     await tester.pumpAndSettle();
-    await capture('dashboard-v3-ajout');
+    await capture('palette-blue-ajout');
     Navigator.of(tester.element(find.text('Ajouter une constante'))).pop();
     await tester.pumpAndSettle();
     await tester.tap(find.text('Articles').last);
@@ -93,10 +93,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await capture('dashboard-v3-articles');
+    await capture('palette-blue-articles');
     await tester.tap(find.text('Paramètres').last);
     await tester.pumpAndSettle();
-    await capture('dashboard-v3-parametres');
+    await capture('palette-blue-parametres');
     expect(find.byType(RaisedNavigationBar), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

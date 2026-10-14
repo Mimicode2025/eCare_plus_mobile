@@ -18,7 +18,7 @@ class PageHeader extends StatelessWidget {
     this.showBack = true,
     this.leading,
     this.action,
-    this.titleColor = AppColors.textDark,
+    this.titleColor = AppColors.primary,
     this.subtitleColor = AppColors.textMuted,
   });
 

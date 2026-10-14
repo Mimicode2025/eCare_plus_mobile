@@ -67,7 +67,7 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
     if (!widget.firstRegistration) {
       return const Scaffold(body: SizedBox.shrink());
     }
-    final deep = Color.lerp(AppColors.primary, const Color(0xFF06214A), .55)!;
+    const deep = AppColors.primaryDeep;
     final badge = _iv(0, .35, Curves.elasticOut);
     final title = _iv(.2, .45);
 
@@ -79,7 +79,7 @@ class _RegistrationSuccessPageState extends State<RegistrationSuccessPage>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [deep, AppColors.primary, const Color(0xFF3BBFF3)],
+            colors: [deep, AppColors.primary, AppColors.primaryAccent],
             stops: const [0, .55, 1],
           ),
         ),

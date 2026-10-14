@@ -5,7 +5,7 @@ import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/article_cover.dart';
 
-const _editorialBlue = Color(0xFF126C9D);
+const _editorialBlue = AppColors.primary;
 
 class ArticlesPage extends StatefulWidget {
   const ArticlesPage({super.key});
@@ -362,7 +362,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                     style: AppDecor.t(
                       10,
                       w: FontWeight.w700,
-                      c: const Color(0xFF237FAE),
+                      c: AppColors.primaryAccent,
                     ).copyWith(letterSpacing: 1),
                   ),
                 ),

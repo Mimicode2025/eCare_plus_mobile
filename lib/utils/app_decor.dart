@@ -3,11 +3,33 @@ import 'app_colors.dart';
 import 'app_text_styles.dart';
 
 class AppDecor {
-  static const primaryDark = AppColors.primary;
+  static const primaryDark = AppColors.primaryDeep;
 
   static const gradient = LinearGradient(
-    colors: [AppColors.primary, Color(0xFF3BBFF3)],
+    colors: [AppColors.primary, AppColors.primaryAccent],
   );
+
+  static const buttonGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      AppColors.primaryDeep,
+      AppColors.primaryAccent,
+      AppColors.primaryBright,
+    ],
+    stops: [0, .6, 1],
+  );
+
+  static Widget buttonBackground(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) => states.contains(WidgetState.disabled)
+      ? child ?? const SizedBox.shrink()
+      : Ink(
+          decoration: const BoxDecoration(gradient: buttonGradient),
+          child: child,
+        );
 
   static TextStyle t(
     double size, {

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import '../../utils/app_colors.dart';
+
 /// The [AppTheme] defines light and dark themes for the app.
 ///
 /// Theme setup for FlexColorScheme package v9.
@@ -20,13 +22,13 @@ abstract final class AppTheme {
   static ThemeData light = FlexThemeData.light(
     // User defined custom colors made with FlexSchemeColor() API.
     colors: const FlexSchemeColor(
-      primary: Color(0xFF0086C9),
-      primaryContainer: Color(0xFFD0EAFF),
-      secondary: Color(0xFFAC3306),
-      secondaryContainer: Color(0xFFFFDBCF),
+      primary: AppColors.primary,
+      primaryContainer: AppColors.primaryLight,
+      secondary: AppColors.primaryAccent,
+      secondaryContainer: AppColors.primaryLighter,
       tertiary: Color(0xFF979797),
-      tertiaryContainer: Color(0xFF36BFFA),
-      appBarColor: Color(0xFFFFDBCF),
+      tertiaryContainer: AppColors.primaryLight,
+      appBarColor: AppColors.primary,
       error: Color(0xFFBA1A1A),
       errorContainer: Color(0xFFFFDAD6),
     ),
@@ -51,14 +53,15 @@ abstract final class AppTheme {
     colors: const FlexSchemeColor(
       primary: Color(0xFF9FC9FF),
       primaryContainer: Color(0xFF00325B),
-      primaryLightRef: Color(0xFF0086C9), // The color of light mode primary
-      secondary: Color(0xFFFFB59D),
-      secondaryContainer: Color(0xFF872100),
-      secondaryLightRef: Color(0xFFAC3306), // The color of light mode secondary
+      primaryLightRef: AppColors.primary, // The color of light mode primary
+      secondary: Color(0xFF99C8EC),
+      secondaryContainer: AppColors.primaryDeep,
+      secondaryLightRef:
+          AppColors.primaryAccent, // The color of light mode secondary
       tertiary: Color(0xFF86D2E1),
       tertiaryContainer: Color(0xFF004E59),
       tertiaryLightRef: Color(0xFF979797), // The color of light mode tertiary
-      appBarColor: Color(0xFFFFDBCF),
+      appBarColor: AppColors.primary,
       error: Color(0xFFFFB4AB),
       errorContainer: Color(0xFF93000A),
     ),

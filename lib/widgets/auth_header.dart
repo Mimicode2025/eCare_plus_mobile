@@ -48,7 +48,7 @@ class _AuthHeaderState extends State<AuthHeader>
 
   @override
   Widget build(BuildContext context) {
-    final deep = Color.lerp(AppColors.primary, const Color(0xFF06214A), .55)!;
+    const deep = AppColors.primaryDeep;
     return ClipPath(
       clipper: _WaveClipper(),
       child: Container(
@@ -58,7 +58,7 @@ class _AuthHeaderState extends State<AuthHeader>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [deep, AppColors.primary, const Color(0xFF3BBFF3)],
+            colors: [deep, AppColors.primary, AppColors.primaryAccent],
             stops: const [0, .55, 1],
           ),
         ),

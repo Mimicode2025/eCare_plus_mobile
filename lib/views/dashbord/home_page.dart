@@ -220,7 +220,7 @@ class _WelcomeCard extends StatelessWidget {
       gradient: const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF154D85), Color(0xFF2476B6)],
+        colors: [AppColors.primaryDeep, AppColors.primary],
       ),
       borderRadius: BorderRadius.circular(24),
       boxShadow: [
@@ -420,7 +420,9 @@ class _DoctorCard extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: FilledButton.icon(
+                clipBehavior: Clip.antiAlias,
                 style: FilledButton.styleFrom(
+                  backgroundBuilder: AppDecor.buttonBackground,
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 8),

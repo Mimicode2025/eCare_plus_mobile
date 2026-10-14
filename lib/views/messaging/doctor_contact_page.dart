@@ -111,7 +111,9 @@ class DoctorContactPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
+                  clipBehavior: Clip.antiAlias,
                   style: FilledButton.styleFrom(
+                    backgroundBuilder: AppDecor.buttonBackground,
                     backgroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(
                       vertical: 16,

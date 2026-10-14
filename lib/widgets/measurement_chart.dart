@@ -139,7 +139,7 @@ class MeasurementChart extends StatelessWidget {
               ),
               if (pressure)
                 const ChartLegend(
-                  color: Color(0xFF315D85),
+                  color: AppColors.chartSecondary,
                   label: 'Diastolique',
                 ),
             ],
@@ -231,7 +231,7 @@ class _LinePainter extends CustomPainter {
 
     series(AppColors.primary, false);
     if (points.any((point) => point.secondary != null)) {
-      series(const Color(0xFF315D85), true);
+      series(AppColors.chartSecondary, true);
     }
   }
 
