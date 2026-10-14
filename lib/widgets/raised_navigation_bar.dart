@@ -46,7 +46,7 @@ class RaisedNavigationBar extends StatelessWidget {
         final contentWidth = math.min(available, 680.0);
         final side = insets.left + (available - contentWidth) / 2;
         final cellWidth = contentWidth / 5;
-        final diameter = math.min(60.0, cellWidth - 4);
+        final diameter = math.min(52.0, cellWidth - 4);
         final labelStyle = AppDecor.t(10, w: FontWeight.w600, h: 1.25);
         var labelHeight = 0.0;
         for (final destination in _destinations) {
@@ -58,11 +58,11 @@ class RaisedNavigationBar extends StatelessWidget {
           labelHeight = math.max(labelHeight, painter.height);
           painter.dispose();
         }
-        const labelTop = 68.0;
-        final contentHeight = labelTop + labelHeight.ceilToDouble() + 20;
+        const labelTop = 52.0;
+        final contentHeight = labelTop + labelHeight.ceilToDouble() + 8;
         final center = side + contentWidth / 2;
         return SizedBox(
-          height: contentHeight + math.max(8.0, insets.bottom),
+          height: contentHeight + math.max(6.0, insets.bottom),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -71,7 +71,7 @@ class RaisedNavigationBar extends StatelessWidget {
                   child: CustomPaint(
                     painter: _NavigationSurface(
                       center: center,
-                      shoulder: math.min(64.0, cellWidth),
+                      shoulder: math.min(56.0, cellWidth),
                     ),
                   ),
                 ),
@@ -133,7 +133,7 @@ class RaisedNavigationBar extends StatelessWidget {
                               child: Icon(
                                 Icons.add_rounded,
                                 color: Colors.white,
-                                size: 32,
+                                size: 28,
                               ),
                             ),
                           ),
@@ -172,16 +172,16 @@ class RaisedNavigationBar extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: select,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
               child: Stack(
                 children: [
                   Positioned(
-                    top: 36,
+                    top: 28,
                     left: 0,
                     right: 0,
                     child: Icon(
                       selected ? destination.selectedIcon : destination.icon,
-                      size: 24,
+                      size: 22,
                       color: selected
                           ? AppColors.navigationBlue
                           : AppColors.textMuted,
@@ -207,22 +207,6 @@ class RaisedNavigationBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 6,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: AnimatedContainer(
-                        duration: duration,
-                        width: selected ? 18 : 0,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: AppColors.navigationBlue,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -239,8 +223,8 @@ class _NavigationSurface extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const baseline = 28.0;
-    const corner = 20.0;
+    const baseline = 20.0;
+    const corner = 18.0;
     final left = math.max(corner, center - shoulder);
     final right = math.min(size.width - corner, center + shoulder);
     final path = Path()
