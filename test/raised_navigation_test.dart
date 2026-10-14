@@ -4,6 +4,7 @@ import 'package:ecare_plus_mobile/models/care_data.dart';
 import 'package:ecare_plus_mobile/main.dart';
 import 'package:ecare_plus_mobile/widgets/raised_navigation_bar.dart';
 import 'package:ecare_plus_mobile/views/onbording/splash_screen.dart';
+import 'package:ecare_plus_mobile/views/dashbord/articles_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,7 @@ void main() {
     await tester.tap(find.text('Enregistrer la mesure'));
     await tester.pumpAndSettle();
     expect(find.text('Ajouter une constante'), findsNothing);
-    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
+    expect(find.byType(ArticlesPage), findsOneWidget);
     await tester.tap(add);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Tension artérielle'));
@@ -57,7 +58,7 @@ void main() {
     await tester.tap(find.text('Enregistrer la mesure'));
     await tester.pumpAndSettle();
     expect(find.text('Ajouter une constante'), findsNothing);
-    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
+    expect(find.byType(ArticlesPage), findsOneWidget);
     final data = tester
         .element(find.byType(RaisedNavigationBar))
         .read<CareData>();

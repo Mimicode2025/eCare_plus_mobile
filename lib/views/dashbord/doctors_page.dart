@@ -188,14 +188,14 @@ class _DoctorDirectoryCard extends StatelessWidget {
                 color: doctor.color,
                 child: Image.asset(
                   doctor.imageAsset,
-                  width: stacked ? constraints.maxWidth : 104,
-                  height: 146,
+                  width: stacked ? constraints.maxWidth : 88,
+                  height: 112,
                   fit: stacked ? BoxFit.contain : BoxFit.cover,
                   alignment: const Alignment(-.44, -1),
                   semanticLabel: doctor.name,
                   errorBuilder: (_, _, _) => SizedBox(
-                    width: stacked ? constraints.maxWidth : 104,
-                    height: 146,
+                    width: stacked ? constraints.maxWidth : 88,
+                    height: 112,
                     child: Icon(
                       doctor.icon,
                       color: AppColors.primary,
@@ -214,7 +214,7 @@ class _DoctorDirectoryCard extends StatelessWidget {
                   doctor.specialty,
                   style: AppDecor.t(12, c: AppColors.textMuted),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 12),
                 SizedBox(
                   width: double.infinity,
                   child: Tooltip(
@@ -272,9 +272,9 @@ class _DoctorDirectoryCard extends StatelessWidget {
                       Expanded(child: details),
                     ],
                   ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 const Divider(height: 1, color: AppColors.border),
-                const SizedBox(height: 6),
+                const SizedBox(height: 2),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton.icon(

@@ -54,9 +54,12 @@ class RaisedNavigationBar extends StatelessWidget {
         final diameter = math.min(52.0, cellWidth - 4);
         final labelStyle = AppDecor.t(10, w: FontWeight.w600, h: 1.25);
         var labelHeight = 0.0;
-        for (final destination in _destinations) {
+        for (final label in [
+          ..._destinations.map((destination) => destination.label),
+          'Mesures',
+        ]) {
           final painter = TextPainter(
-            text: TextSpan(text: destination.label, style: labelStyle),
+            text: TextSpan(text: label, style: labelStyle),
             textDirection: direction,
             textScaler: textScaler,
           )..layout(maxWidth: cellWidth - 8);
@@ -114,9 +117,9 @@ class RaisedNavigationBar extends StatelessWidget {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.navigationBlue.withValues(alpha: .22),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
+                        color: AppColors.navigationBlue.withValues(alpha: .12),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -143,6 +146,25 @@ class RaisedNavigationBar extends StatelessWidget {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: center - cellWidth / 2,
+                top: labelTop,
+                width: cellWidth,
+                child: ExcludeSemantics(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: onAddMeasurement,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Text(
+                        'Mesures',
+                        textAlign: TextAlign.center,
+                        style: labelStyle.copyWith(color: AppColors.primary),
                       ),
                     ),
                   ),

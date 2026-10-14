@@ -3,6 +3,7 @@ import 'package:ecare_plus_mobile/services/document_library.dart';
 import 'package:ecare_plus_mobile/widgets/raised_navigation_bar.dart';
 import 'package:ecare_plus_mobile/views/onbording/splash_screen.dart';
 import 'package:ecare_plus_mobile/views/dashbord/home_page.dart';
+import 'package:ecare_plus_mobile/views/dashbord/articles_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -71,7 +72,7 @@ void main() {
     expect(find.text('Mes rendez-vous'), findsOneWidget);
     await tester.tap(find.text('Articles').last);
     await tester.pumpAndSettle();
-    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
+    expect(find.byType(ArticlesPage), findsOneWidget);
     await tester.tap(find.text('Paramètres').last);
     await tester.pumpAndSettle();
     expect(find.text('Mon espace'), findsOneWidget);
@@ -116,7 +117,7 @@ void main() {
     expect(find.text('Accueil').hitTestable(), findsOneWidget);
     await tester.tap(find.text('Articles').last);
     await tester.pumpAndSettle();
-    expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
+    expect(find.byType(ArticlesPage), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump(const Duration(seconds: 3));
@@ -166,7 +167,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Médecins'));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), 'Cardiologue');
+    await tester.enterText(find.byType(TextField), 'Lawson');
     await tester.pumpAndSettle();
     expect(find.text('Dr Lawson Jennifer'), findsOneWidget);
     expect(find.text('Dr Johnson Mike'), findsNothing);

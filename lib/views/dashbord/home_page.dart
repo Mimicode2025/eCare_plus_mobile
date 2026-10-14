@@ -215,7 +215,7 @@ class _WelcomeCard extends StatelessWidget {
   const _WelcomeCard();
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.fromLTRB(20, 24, 16, 24),
+    padding: const EdgeInsets.fromLTRB(18, 18, 16, 18),
     decoration: BoxDecoration(
       gradient: const LinearGradient(
         begin: Alignment.topLeft,
@@ -225,9 +225,9 @@ class _WelcomeCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(24),
       boxShadow: [
         BoxShadow(
-          color: AppColors.navigationBlue.withValues(alpha: .18),
-          blurRadius: 20,
-          offset: const Offset(0, 8),
+          color: AppColors.navigationBlue.withValues(alpha: .09),
+          blurRadius: 14,
+          offset: const Offset(0, 4),
         ),
       ],
     ),
@@ -239,24 +239,24 @@ class _WelcomeCard extends StatelessWidget {
             children: [
               Text(
                 'Bienvenue',
-                style: AppDecor.t(21, w: FontWeight.w700, c: Colors.white),
+                style: AppDecor.t(20, w: FontWeight.w700, c: Colors.white),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Text(
                 'Votre suivi médical\ncommence ici.',
-                style: AppDecor.t(13, c: const Color(0xFFE2EFFA), h: 1.6),
+                style: AppDecor.t(13, c: const Color(0xFFE2EFFA), h: 1.5),
               ),
             ],
           ),
         ),
         const SizedBox(width: 12),
         Container(
-          width: 104,
-          height: 124,
+          width: 80,
+          height: 92,
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(18),
           ),
           child: Image.asset(
             'assets/images/ecareImage1.png',

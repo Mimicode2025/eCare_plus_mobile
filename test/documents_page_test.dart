@@ -74,6 +74,35 @@ void main() {
   }
 
   testWidgets(
+    'Full document title and file name remain accessible from information menu',
+    (tester) async {
+      const title =
+          'Bilan de suivi annuel et compte rendu de consultation spécialisée';
+      await tester.runAsync(
+        () => library.importFile(
+          library.selectedFile!,
+          title: title,
+          category: DocumentCategory.results,
+          conditions: {},
+          date: DateTime(2026, 10, 14),
+        ),
+      );
+      await start(tester);
+      await tester.ensureVisible(find.byTooltip('Actions pour $title'));
+      await tester.tap(find.byTooltip('Actions pour $title'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Informations'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(SelectableText, title), findsOneWidget);
+      expect(find.widgetWithText(SelectableText, 'bilan.pdf'), findsOneWidget);
+      await tester.tap(find.text('Fermer'));
+      await tester.pumpAndSettle();
+      expect(library.opens, 0);
+      expect(library.documents.single.title, title);
+    },
+  );
+
+  testWidgets(
     'Search and filters combine, cancelled drafts do not apply, reset preserves search',
     (tester) async {
       await tester.runAsync(() async {

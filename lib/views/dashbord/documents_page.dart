@@ -126,40 +126,81 @@ class _DocumentsPageState extends State<DocumentsPage> {
     });
   }
 
-  Future<void> _menu(MedicalDocument item, String action) => _action(() async {
-    if (action == 'open') await _library.open(item);
-    if (action == 'download') {
-      if (await _library.export(item)) {
-        _notice('Document enregistré à l’emplacement choisi.');
-      }
-    }
-    if (action == 'delete') {
-      if (!mounted) return;
-      final confirmed = await showDialog<bool>(
+  Future<void> _menu(MedicalDocument item, String action) async {
+    if (action == 'details') {
+      await showDialog<void>(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Retirer ce document ?'),
-          content: Text(
-            '« ${item.title} » sera supprimé de ce carnet. Le fichier d’origine restera intact.',
+        builder: (dialogContext) => AlertDialog(
+          title: const Text('Informations du document'),
+          scrollable: true,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Nom du document',
+                style: AppDecor.t(12, c: AppColors.textMuted),
+              ),
+              const SizedBox(height: 6),
+              SelectableText(
+                item.title,
+                style: AppDecor.t(15, w: FontWeight.w600),
+              ),
+              const SizedBox(height: 18),
+              Text(
+                'Nom du fichier',
+                style: AppDecor.t(12, c: AppColors.textMuted),
+              ),
+              const SizedBox(height: 6),
+              SelectableText(item.fileName, style: AppDecor.t(13)),
+            ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Retirer'),
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Fermer'),
             ),
           ],
         ),
       );
-      if (confirmed == true) {
-        await _library.remove(item);
-        _notice('Document retiré du carnet.');
-      }
+      return;
     }
-  });
+    await _action(() async {
+      if (action == 'open') await _library.open(item);
+      if (action == 'download') {
+        if (await _library.export(item)) {
+          _notice('Document enregistré à l’emplacement choisi.');
+        }
+      }
+      if (action == 'delete') {
+        if (!mounted) return;
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Retirer ce document ?'),
+            content: Text(
+              '« ${item.title} » sera supprimé de ce carnet. Le fichier d’origine restera intact.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Annuler'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Retirer'),
+              ),
+            ],
+          ),
+        );
+        if (confirmed == true) {
+          await _library.remove(item);
+          _notice('Document retiré du carnet.');
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
     animation: _library,
@@ -415,24 +456,38 @@ class _NotebookCover extends StatelessWidget {
           Positioned(right: -42, top: -65, child: _circle(180)),
           Positioned(right: -18, bottom: -105, child: _circle(175)),
           Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+            child: Row(
               children: [
                 const Icon(
                   Icons.folder_shared_outlined,
                   color: Colors.white,
-                  size: 38,
+                  size: 30,
                 ),
-                const SizedBox(height: 14),
-                Text(
-                  'Mon carnet de santé',
-                  style: AppDecor.t(22, w: FontWeight.w700, c: Colors.white),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Vos documents, votre histoire',
-                  style: AppDecor.t(14, c: Colors.white.withValues(alpha: .85)),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Mon carnet de santé',
+                        style: AppDecor.t(
+                          17,
+                          w: FontWeight.w700,
+                          c: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Vos documents, votre histoire',
+                        style: AppDecor.t(
+                          12,
+                          c: Colors.white.withValues(alpha: .85),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -502,6 +557,8 @@ class _DocumentRow extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: AppDecor.t(
                       15,
                       w: FontWeight.w700,
@@ -537,6 +594,10 @@ class _DocumentRow extends StatelessWidget {
             onSelected: onAction,
             itemBuilder: (_) => [
               const PopupMenuItem(value: 'open', child: Text('Ouvrir')),
+              const PopupMenuItem(
+                value: 'details',
+                child: Text('Informations'),
+              ),
               const PopupMenuItem(
                 value: 'download',
                 child: Text('Télécharger'),
