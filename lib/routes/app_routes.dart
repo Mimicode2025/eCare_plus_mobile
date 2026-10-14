@@ -24,6 +24,9 @@ class AppRoutes {
   static const String doctors = '/doctors';
   static const String privacyPolicy = '/privacy-policy';
   static const String termsOfUse = '/terms-of-use';
+  static const String about = '/ecare-plus';
+  static const String guide = '/guide';
+  static const String localData = '/local-data';
 
   // Recoverable errors
   static const String pageNotFound = '/error/not-found';

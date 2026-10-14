@@ -74,7 +74,7 @@ void main() {
     expect(find.text('LE JOURNAL ECARE+'), findsOneWidget);
     await tester.tap(find.text('Paramètres').last);
     await tester.pumpAndSettle();
-    expect(find.text('Mon compte'), findsOneWidget);
+    expect(find.text('Mon espace'), findsOneWidget);
     await tester.tap(find.text('Accueil').last);
     await tester.pumpAndSettle();
     expect(find.byType(HomePage), findsOneWidget);

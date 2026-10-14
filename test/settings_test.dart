@@ -31,7 +31,7 @@ void main() {
       ),
     );
     await openSettings(tester, data);
-    expect(find.text('Votre espace, à votre rythme.'), findsOneWidget);
+    expect(find.text('Mon espace santé'), findsOneWidget);
     await tester.scrollUntilVisible(find.byType(Switch), 250);
     final semantics = tester.ensureSemantics();
     expect(

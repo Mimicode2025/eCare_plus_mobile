@@ -89,7 +89,7 @@ void main() {
     await tester.pumpAndSettle();
     await capture('parametres-mobile');
     final settingsScroll = find.ancestor(
-      of: find.text('Votre espace, à votre rythme.'),
+      of: find.text('Mon espace santé'),
       matching: find.byType(SingleChildScrollView),
     );
     await tester.drag(settingsScroll, const Offset(0, -570));

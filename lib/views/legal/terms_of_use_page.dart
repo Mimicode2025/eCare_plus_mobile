@@ -12,7 +12,7 @@ class TermsOfUsePage extends StatelessWidget {
     sections: [
       LegalSection(
         'Objet de l’application',
-        'eCARE+ propose un espace personnel pour consulter des graphiques de constantes, organiser un agenda et accéder aux rubriques de suivi. La version actuelle sert à essayer ces fonctions. Elle ne constitue pas un dossier médical connecté ni une confirmation de prise en charge par un professionnel.',
+        'eCARE+ propose un espace personnel pour consulter des graphiques de constantes, organiser un agenda et conserver des documents médicaux sur cet appareil. Elle ne constitue pas un dossier médical connecté ni une confirmation de prise en charge par un professionnel.',
       ),
       LegalSection(
         'Accès et acceptation',
@@ -28,7 +28,7 @@ class TermsOfUsePage extends StatelessWidget {
       ),
       LegalSection(
         'Données de session',
-        'Les mesures, rendez-vous et photo de cette version sont temporaires. Ils sont effacés de l’état de l’application à la déconnexion. Conservez séparément les informations dont vous avez besoin. Les modalités de traitement des données sont décrites dans la politique de confidentialité.',
+        'Les mesures, rendez-vous, messages, rappels et photo sont temporaires. Ils sont effacés de l’état de l’application à la déconnexion et ne sont pas restaurés après un redémarrage. Le carnet de documents et les pathologies sélectionnées restent enregistrés sur cet appareil. Vous pouvez retirer les documents depuis le carnet ; leurs fichiers d’origine et copies exportées restent intacts. Conservez séparément les informations importantes. Les modalités de traitement des données sont décrites dans la politique de confidentialité.',
       ),
       LegalSection(
         'Disponibilité et évolution',
