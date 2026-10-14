@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/care_data.dart';
 import '../../routes/app_routes.dart';
+import '../../services/app_share_service.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
@@ -13,6 +14,23 @@ import '../settings/local_data_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+  Future<void> _share(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    try {
+      await AppShareService.share(
+        origin: box.localToGlobal(Offset.zero) & box.size,
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Impossible d’ouvrir le partage. Réessayez.'),
+        ),
+      );
+    }
+  }
+
   void _profile(BuildContext context) => Navigator.push(
     context,
     MaterialPageRoute<void>(builder: (_) => const ProfilePage()),
@@ -218,6 +236,15 @@ class SettingsPage extends StatelessWidget {
           SettingsSection(
             title: 'Aide et confidentialité',
             children: [
+              Builder(
+                builder: (shareContext) => SettingsItem(
+                  icon: Icons.share_outlined,
+                  title: 'Partager l’application',
+                  subtitle:
+                      'Présenter eCARE+ sur WhatsApp ou une autre application.',
+                  onTap: () => _share(shareContext),
+                ),
+              ),
               SettingsItem(
                 icon: Icons.info_outline_rounded,
                 title: 'À propos de eCARE+',

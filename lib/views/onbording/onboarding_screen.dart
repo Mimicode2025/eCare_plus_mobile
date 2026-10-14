@@ -37,7 +37,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     _OnboardingData(
       title: 'Maîtrisez votre\nparcours de soin',
       subtitle:
-          'Suivez l\'évolution de vos symptômes, de vos constantes vitales et de votre traitement en temps réel.',
+          'Enregistrez vos constantes vitales et retrouvez leur évolution dans votre suivi.',
       imagePath: 'assets/images/ecareImage1.png',
     ),
     _OnboardingData(
@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     _OnboardingData(
       title: '  Reprenez le pouvoir\nsur votre santé',
       subtitle:
-          'Grâce à l\'accompagnement intelligent d\'eCARE+, votre traitement devient simple et personnalisé.',
+          'Avec eCARE+, retrouvez vos mesures, vos documents médicaux et votre agenda au même endroit.',
       imagePath: 'assets/images/ecareImage3.png',
     ),
   ];
@@ -61,9 +61,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _fadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeIn),
-    );
+    _fadeAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeIn));
     _slideAnim = Tween<Offset>(
       begin: const Offset(0.15, 0),
       end: Offset.zero,
@@ -132,10 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     padding: const EdgeInsets.only(top: 12, right: 20),
                     child: TextButton(
                       onPressed: _skip,
-                      child: Text(
-                        'Ignorer',
-                        style: AppTextStyles.link,
-                      ),
+                      child: Text('Ignorer', style: AppTextStyles.link),
                     ),
                   ),
                 ),
@@ -158,10 +156,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 ),
 
                 // Dots de pagination
-                _DotsIndicator(
-                  count: _pages.length,
-                  current: _currentPage,
-                ),
+                _DotsIndicator(count: _pages.length, current: _currentPage),
                 const SizedBox(height: 20),
 
                 // Bouton d'action
@@ -209,8 +204,10 @@ class _OnboardingPage extends StatelessWidget {
               // Illustration (Image PNG ecareImage1..5)
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final double imageHeight =
-                      (screenSize.height * 0.35).clamp(180.0, 260.0);
+                  final double imageHeight = (screenSize.height * 0.35).clamp(
+                    180.0,
+                    260.0,
+                  );
                   return SizedBox(
                     height: imageHeight,
                     child: Image.asset(

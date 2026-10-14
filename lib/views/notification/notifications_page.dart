@@ -186,14 +186,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       '${careDate(item.date)} à ${careTime(item.date)}',
                       style: AppDecor.t(11, c: AppColors.textMuted),
                     ),
-                    if (item.category != NotificationCategory.alert) ...[
+                    if (item.category != NotificationCategory.alert &&
+                        item.category != NotificationCategory.medication) ...[
                       const SizedBox(height: 6),
                       TextButton.icon(
                         onPressed: () => Navigator.pushNamed(
                           context,
                           switch (item.category) {
                             NotificationCategory.medication =>
-                              AppRoutes.treatments,
+                              AppRoutes.documents,
                             NotificationCategory.appointment =>
                               AppRoutes.appointments,
                             NotificationCategory.measurement =>
@@ -205,7 +206,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                         label: Text(switch (item.category) {
                           NotificationCategory.medication =>
-                            'Voir mes traitements',
+                            'Voir mes documents',
                           NotificationCategory.appointment =>
                             'Voir mes rendez-vous',
                           NotificationCategory.measurement =>

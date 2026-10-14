@@ -287,12 +287,6 @@ class _QuickActions extends StatelessWidget {
         'lib/data/icon_document.png',
       ),
       (
-        Icons.medication_outlined,
-        'Traitements',
-        AppRoutes.treatments,
-        'lib/data/icon_medicament.png',
-      ),
-      (
         Icons.medical_services_outlined,
         'Médecins',
         AppRoutes.doctors,
@@ -329,7 +323,6 @@ class _QuickActions extends StatelessWidget {
                       color: [
                         const Color(0xFFD3E6F8),
                         const Color(0xFFE9EFFB),
-                        const Color(0xFFE3F3F0),
                         const Color(0xFFE8F2FC),
                       ][index],
                       borderRadius: BorderRadius.circular(16),
