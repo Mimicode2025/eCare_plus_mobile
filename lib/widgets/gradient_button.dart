@@ -7,12 +7,14 @@ class GradientButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
+  final IconData? icon;
 
   const GradientButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
+    this.icon,
   });
 
   @override
@@ -46,13 +48,24 @@ class GradientButton extends StatelessWidget {
                       color: Colors.white,
                     ),
                   )
-                : Text(
-                    text,
-                    style: AppTextStyles.label.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (icon != null) ...[
+                        Icon(icon, color: Colors.white, size: 22),
+                        const SizedBox(width: 10),
+                      ],
+                      Flexible(
+                        child: Text(
+                          text,
+                          style: AppTextStyles.label.copyWith(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'models/care_data.dart';
 import 'services/profile_photo_service.dart';
 import 'services/chat_media_service.dart';
+import 'services/document_library.dart';
 import 'widgets/main_shell.dart';
 import 'utils/app_colors.dart';
 import 'routes/app_routes.dart';
@@ -43,12 +44,20 @@ void main() async {
 
 class ECarePlusApp extends StatelessWidget {
   final CareData? initialData;
-  const ECarePlusApp({super.key, this.initialData});
+  final DocumentLibrary? documentLibrary;
+  const ECarePlusApp({super.key, this.initialData, this.documentLibrary});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => initialData ?? CareData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CareData>(
+          create: (_) => initialData ?? CareData(),
+        ),
+        ChangeNotifierProvider<DocumentLibrary>.value(
+          value: documentLibrary ?? DocumentLibrary.instance,
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'eCARE+',

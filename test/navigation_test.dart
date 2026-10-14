@@ -1,4 +1,5 @@
 import 'package:ecare_plus_mobile/main.dart';
+import 'package:ecare_plus_mobile/services/document_library.dart';
 import 'package:ecare_plus_mobile/widgets/raised_navigation_bar.dart';
 import 'package:ecare_plus_mobile/views/onbording/splash_screen.dart';
 import 'package:ecare_plus_mobile/views/dashbord/home_page.dart';
@@ -6,11 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> openHome(WidgetTester tester) async {
-  await tester.pumpWidget(const ECarePlusApp());
+  await tester.pumpWidget(ECarePlusApp(documentLibrary: _EmptyDocuments()));
   Navigator.of(
     tester.element(find.byType(SplashScreen)),
   ).pushReplacementNamed('/home');
   await tester.pumpAndSettle();
+}
+
+class _EmptyDocuments extends DocumentLibrary {
+  @override
+  Future<void> load() async {
+    loaded = true;
+  }
 }
 
 Future<void> tapHomeShortcut(WidgetTester tester, String label) async {

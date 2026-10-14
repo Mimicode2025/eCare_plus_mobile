@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../models/care_data.dart';
+import '../../models/medical_document.dart';
+import '../../services/document_library.dart';
 import '../../services/profile_photo_service.dart';
 import '../../widgets/patient_avatar.dart';
 import '../../utils/app_colors.dart';
@@ -31,6 +33,27 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _groupe;
   bool _loading = false;
   bool _pickingPhoto = false;
+  Set<MedicalCondition> _conditions = {};
+  bool _conditionsChanged = false;
+  late final DocumentLibrary _documents =
+      context.read<DocumentLibrary?>() ?? DocumentLibrary.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConditions();
+  }
+
+  Future<void> _loadConditions() async {
+    try {
+      await _documents.load();
+      if (mounted && !_conditionsChanged) {
+        setState(() => _conditions = Set.of(_documents.conditions));
+      }
+    } catch (_) {
+      // Document storage can be retried when the profile is saved.
+    }
+  }
 
   Future<void> _choosePhoto() async {
     if (_pickingPhoto) return;
@@ -86,6 +109,21 @@ class _ProfilePageState extends State<ProfilePage> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
+    if (_conditionsChanged) {
+      try {
+        await _documents.setConditions(_conditions);
+      } catch (_) {
+        if (mounted) {
+          setState(() => _loading = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Impossible d’enregistrer vos suivis. Réessayez.'),
+            ),
+          );
+        }
+        return;
+      }
+    }
     // TODO: enregistrer le profil via ton service
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
@@ -170,6 +208,37 @@ class _ProfilePageState extends State<ProfilePage> {
                   'O+',
                   'O-',
                 ], (v) => setState(() => _groupe = v)),
+                _Label('Pathologies suivies'),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      for (final condition in MedicalCondition.values)
+                        FilterChip(
+                          label: Text(condition.label),
+                          selected: _conditions.contains(condition),
+                          onSelected: _loading
+                              ? null
+                              : (selected) => setState(() {
+                                  _conditionsChanged = true;
+                                  if (selected) {
+                                    _conditions.add(condition);
+                                  } else {
+                                    _conditions.remove(condition);
+                                  }
+                                }),
+                        ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Vous pouvez sélectionner les deux pour adapter votre carnet.',
+                    style: AppDecor.t(12, c: AppColors.textMuted),
+                  ),
+                ),
                 const SizedBox(height: 30),
                 GradientButton(
                   text: 'Enregistrer',
