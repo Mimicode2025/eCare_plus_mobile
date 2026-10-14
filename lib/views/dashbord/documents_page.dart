@@ -7,6 +7,7 @@ import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
 import '../../widgets/gradient_button.dart';
 import '../../widgets/document_import_sheet.dart';
+import '../../widgets/document_filter_sheet.dart';
 
 class DocumentsPage extends StatefulWidget {
   final DocumentLibrary? library;
@@ -95,56 +96,33 @@ class _DocumentsPageState extends State<DocumentsPage> {
     if (mounted) setState(() => _importSheetOpen = false);
     if (added == true) _notice('Document ajouté à votre carnet.');
   });
-  Future<void> _configure() async {
-    final chosen = Set<MedicalCondition>.of(_library.conditions);
-    final result = await showDialog<Set<MedicalCondition>>(
+  Future<void> _openFilters() async {
+    FocusScope.of(context).unfocus();
+    final result = await showModalBottomSheet<DocumentFilters>(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, update) => AlertDialog(
-          title: const Text('Mes suivis médicaux'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Choisissez les pathologies suivies pour personnaliser votre carnet.',
-              ),
-              for (final condition in MedicalCondition.values)
-                CheckboxListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(condition.label),
-                  value: chosen.contains(condition),
-                  onChanged: (value) => update(() {
-                    if (value == true) {
-                      chosen.add(condition);
-                    } else {
-                      chosen.remove(condition);
-                    }
-                  }),
-                ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, chosen),
-              child: const Text('Enregistrer'),
-            ),
-          ],
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      builder: (_) => DocumentFilterSheet(
+        initial: DocumentFilters(
+          category: _category,
+          condition: _library.conditions.contains(_condition)
+              ? _condition
+              : null,
+          general: _general,
         ),
+        conditions: _library.conditions,
       ),
     );
     if (result == null || !mounted) return;
-    await _action(() async {
-      await _library.setConditions(result);
-      if (mounted) {
-        setState(() {
-          _condition = null;
-          _general = false;
-        });
-      }
+    setState(() {
+      _category = result.category;
+      _condition = result.condition;
+      _general = result.general;
     });
   }
 
@@ -230,15 +208,37 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 controller: _search,
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  hintText: 'Rechercher un document',
+                  hintText: 'Nom du document ou mot-clé…',
+                  labelText: 'Rechercher un document',
                   prefixIcon: const Icon(Icons.search_rounded),
-                  suffixIcon: _search.text.isEmpty
-                      ? null
-                      : IconButton(
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (_search.text.isNotEmpty)
+                        IconButton(
                           tooltip: 'Effacer la recherche',
                           icon: const Icon(Icons.close),
                           onPressed: () => setState(_search.clear),
                         ),
+                      IconButton(
+                        tooltip: 'Filtres',
+                        onPressed: _working ? null : _openFilters,
+                        icon: const Icon(Icons.tune_rounded),
+                        style: IconButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          backgroundColor:
+                              _category != null ||
+                                  _general ||
+                                  _library.conditions.contains(_condition)
+                              ? AppColors.primaryLighter
+                              : null,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -251,56 +251,45 @@ class _DocumentsPageState extends State<DocumentsPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              _filters([
-                _chip(
-                  'Tous',
-                  _category == null,
-                  () => setState(() => _category = null),
+              if (_category != null ||
+                  _general ||
+                  _library.conditions.contains(_condition)) ...[
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (_category != null)
+                      InputChip(
+                        label: Text('Type : ${_category!.label}'),
+                        backgroundColor: AppColors.primaryLighter,
+                        onDeleted: () => setState(() => _category = null),
+                        deleteButtonTooltipMessage: 'Retirer le filtre de type',
+                      ),
+                    if (_general || _library.conditions.contains(_condition))
+                      InputChip(
+                        label: Text(
+                          'Suivi : ${_general ? 'Général' : _condition!.label}',
+                        ),
+                        backgroundColor: AppColors.primaryLighter,
+                        onDeleted: () => setState(() {
+                          _condition = null;
+                          _general = false;
+                        }),
+                        deleteButtonTooltipMessage:
+                            'Retirer le filtre de suivi',
+                      ),
+                  ],
                 ),
-                for (final category in DocumentCategory.values)
-                  _chip(
-                    category.label,
-                    _category == category,
-                    () => setState(() => _category = category),
-                  ),
-              ]),
-              const SizedBox(height: 10),
-              _filters([
-                _chip(
-                  'Tous les suivis',
-                  _condition == null && !_general,
-                  () => setState(() {
+                TextButton(
+                  onPressed: () => setState(() {
+                    _category = null;
                     _condition = null;
                     _general = false;
                   }),
+                  child: const Text('Réinitialiser les filtres'),
                 ),
-                for (final condition in _library.conditions)
-                  _chip(
-                    condition.label,
-                    _condition == condition && !_general,
-                    () => setState(() {
-                      _condition = condition;
-                      _general = false;
-                    }),
-                  ),
-                _chip(
-                  'Général',
-                  _general,
-                  () => setState(() {
-                    _condition = null;
-                    _general = true;
-                  }),
-                ),
-              ]),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: _working ? null : _configure,
-                  icon: const Icon(Icons.tune_rounded, size: 17),
-                  label: const Text('Personnaliser mes suivis'),
-                ),
-              ),
+              ],
               const SizedBox(height: 12),
               Wrap(
                 alignment: WrapAlignment.spaceBetween,
@@ -309,7 +298,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 runSpacing: 4,
                 children: [
                   Text(
-                    'Documents récents',
+                    '${docs.length} document${docs.length > 1 ? 's trouvés' : ' trouvé'}',
                     style: AppDecor.t(
                       20,
                       w: FontWeight.w700,
@@ -410,31 +399,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
         ),
       );
     },
-  );
-  Widget _filters(List<Widget> children) => SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        for (final child in children)
-          Padding(padding: const EdgeInsets.only(right: 8), child: child),
-      ],
-    ),
-  );
-  Widget _chip(String label, bool selected, VoidCallback onTap) => ChoiceChip(
-    label: Text(label),
-    selected: selected,
-    showCheckmark: false,
-    selectedColor: AppColors.primary,
-    backgroundColor: Colors.white,
-    labelStyle: AppDecor.t(
-      12,
-      w: FontWeight.w600,
-      c: selected ? Colors.white : AppColors.primaryDeep,
-    ),
-    side: BorderSide(color: selected ? AppColors.primary : AppColors.border),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
-    onSelected: (_) => onTap(),
   );
 }
 

@@ -28,7 +28,7 @@ class DeviceDocuments extends DocumentLibrary {
       conditions: conditions,
       date: date,
     );
-    imported.complete();
+    if (!imported.isCompleted) imported.complete();
     return item;
   }
 
@@ -66,6 +66,76 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: DocumentsPage(library: library)));
     await tester.pumpAndSettle();
   }
+
+  Future<void> openFilters(WidgetTester tester) async {
+    await tester.ensureVisible(find.byTooltip('Filtres'));
+    await tester.tap(find.byTooltip('Filtres'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets(
+    'Search and filters combine, cancelled drafts do not apply, reset preserves search',
+    (tester) async {
+      await tester.runAsync(() async {
+        for (final category in [
+          DocumentCategory.prescription,
+          DocumentCategory.results,
+        ]) {
+          await library.importFile(
+            library.selectedFile!,
+            title: category == DocumentCategory.prescription
+                ? 'Ordonnance annuelle'
+                : 'Bilan annuel',
+            category: category,
+            conditions: {MedicalCondition.diabetes},
+            date: DateTime(2026, 10, 14),
+          );
+        }
+      });
+      await start(tester);
+      expect(find.byType(ChoiceChip), findsNothing);
+      expect(find.text('2 documents trouvés'), findsOneWidget);
+      await tester.ensureVisible(find.byType(TextField).first);
+      await tester.enterText(find.byType(TextField).first, 'annuel');
+      await tester.pumpAndSettle();
+      await openFilters(tester);
+      await tester.tap(
+        find.widgetWithText(
+          DropdownButtonFormField<DocumentCategory>,
+          'Type de document',
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Ordonnances').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Fermer les filtres'));
+      await tester.pumpAndSettle();
+      expect(find.text('2 documents trouvés'), findsOneWidget);
+      await openFilters(tester);
+      await tester.tap(
+        find.widgetWithText(
+          DropdownButtonFormField<DocumentCategory>,
+          'Type de document',
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Ordonnances').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Afficher les résultats'));
+      await tester.pumpAndSettle();
+      expect(find.text('1 document trouvé'), findsOneWidget);
+      expect(find.text('Type : Ordonnances'), findsOneWidget);
+      expect(find.text('Bilan annuel'), findsNothing);
+      await tester.ensureVisible(find.text('Réinitialiser les filtres'));
+      await tester.tap(find.text('Réinitialiser les filtres'));
+      await tester.pumpAndSettle();
+      expect(find.text('2 documents trouvés'), findsOneWidget);
+      expect(
+        tester.widget<TextField>(find.byType(TextField).first).controller!.text,
+        'annuel',
+      );
+    },
+  );
 
   testWidgets(
     'Import, search, pathology filters, open and download are functional',
@@ -107,8 +177,14 @@ void main() {
       expect(find.text('Aucun document trouvé'), findsOneWidget);
       await tester.enterText(find.byType(TextField).first, '');
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Général').first);
-      await tester.tap(find.text('Général').first);
+      await openFilters(tester);
+      await tester.tap(
+        find.widgetWithText(DropdownButtonFormField<String>, 'Suivi médical'),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Général').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Afficher les résultats'));
       await tester.pumpAndSettle();
       expect(find.text('Bilan partagé'), findsNothing);
       expect(tester.takeException(), isNull);
@@ -134,6 +210,11 @@ void main() {
           ),
           home: DocumentsPage(library: library),
         ),
+      );
+      await tester.pumpAndSettle();
+      await openFilters(tester);
+      await tester.tap(
+        find.widgetWithText(DropdownButtonFormField<String>, 'Suivi médical'),
       );
       await tester.pumpAndSettle();
       expect(find.text('Hypertension'), findsNothing);

@@ -15,6 +15,9 @@ void main() {
     expect(find.text('Suivi personnalisé'), findsNothing);
     await tester.enterText(find.byType(TextField), 'Cardiologue');
     await tester.pumpAndSettle();
+    expect(find.text('Aucun résultat'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'Jennifer');
+    await tester.pumpAndSettle();
     expect(find.text('Dr Lawson Jennifer'), findsOneWidget);
     expect(find.text('Dr Johnson Mike'), findsNothing);
     await tester.enterText(find.byType(TextField), 'inconnu');
@@ -23,6 +26,50 @@ void main() {
     await tester.tap(find.byTooltip('Effacer la recherche'));
     await tester.pumpAndSettle();
     expect(find.text('Dr Johnson Mike'), findsOneWidget);
+  });
+
+  testWidgets(
+    'Specialty filter combines with name and clearing search keeps the specialty',
+    (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: DoctorsPage()));
+      await tester.tap(find.byTooltip('Filtres'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(DropdownButtonFormField<String>));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cardiologue').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Afficher les médecins'));
+      await tester.pumpAndSettle();
+      expect(find.text('Dr Lawson Jennifer'), findsOneWidget);
+      expect(find.text('Dr Johnson Mike'), findsNothing);
+      expect(find.text('Spécialité : Cardiologue'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), 'Johnson');
+      await tester.pumpAndSettle();
+      expect(find.text('Aucun résultat'), findsOneWidget);
+      await tester.tap(find.byTooltip('Effacer la recherche'));
+      await tester.pumpAndSettle();
+      expect(find.text('Dr Lawson Jennifer'), findsOneWidget);
+      expect(find.text('Dr Johnson Mike'), findsNothing);
+      await tester.tap(find.byTooltip('Retirer le filtre de spécialité'));
+      await tester.pumpAndSettle();
+      expect(find.text('Dr Johnson Mike'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Closing specialty filters discards draft choices', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: DoctorsPage()));
+    await tester.tap(find.byTooltip('Filtres'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cardiologue').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Fermer les filtres'));
+    await tester.pumpAndSettle();
+    expect(find.text('Dr Johnson Mike'), findsOneWidget);
+    expect(find.text('Spécialité : Cardiologue'), findsNothing);
   });
 
   testWidgets('Doctor card opens the selected profile', (tester) async {
@@ -67,6 +114,17 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
+        await tester.tap(find.byTooltip('Filtres'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(DropdownButtonFormField<String>));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Cardiologue').last);
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.text('Afficher les médecins'));
+        await tester.tap(find.text('Afficher les médecins'));
+        await tester.pumpAndSettle();
+        expect(find.text('Spécialité : Cardiologue'), findsOneWidget);
+        expect(tester.takeException(), isNull);
         await tester.ensureVisible(find.text('Ajouter à mon agenda').first);
         await tester.tap(find.text('Ajouter à mon agenda').first);
         await tester.pumpAndSettle();

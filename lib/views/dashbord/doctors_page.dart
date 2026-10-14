@@ -3,6 +3,7 @@ import '../../data/doctor_catalog.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_decor.dart';
 import '../../widgets/care_page.dart';
+import '../../widgets/doctor_specialty_filter_sheet.dart';
 import '../messaging/doctor_chat_page.dart';
 import '../messaging/doctor_contact_page.dart';
 import 'appointments_page.dart';
@@ -16,6 +17,30 @@ class DoctorsPage extends StatefulWidget {
 class _DoctorsPageState extends State<DoctorsPage> {
   final _searchController = TextEditingController();
   String _query = '';
+  String? _specialty;
+
+  Future<void> _openFilters() async {
+    FocusScope.of(context).unfocus();
+    final specialties =
+        doctorCatalog.map((doctor) => doctor.specialty).toSet().toList()
+          ..sort();
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      builder: (_) => DoctorSpecialtyFilterSheet(
+        specialties: specialties,
+        initialSpecialty: _specialty,
+      ),
+    );
+    if (result == null || !mounted) return;
+    setState(() => _specialty = result.isEmpty ? null : result);
+  }
 
   @override
   void dispose() {
@@ -27,9 +52,9 @@ class _DoctorsPageState extends State<DoctorsPage> {
   Widget build(BuildContext context) {
     final doctors = doctorCatalog
         .where(
-          (doctor) => '${doctor.name} ${doctor.specialty}'
-              .toLowerCase()
-              .contains(_query.trim().toLowerCase()),
+          (doctor) =>
+              (_specialty == null || doctor.specialty == _specialty) &&
+              doctor.name.toLowerCase().contains(_query.trim().toLowerCase()),
         )
         .toList();
     return CarePage(
@@ -51,14 +76,16 @@ class _DoctorsPageState extends State<DoctorsPage> {
               style: AppDecor.t(14),
               decoration: InputDecoration(
                 labelText: 'Rechercher un médecin',
-                hintText: 'Nom ou spécialité',
+                hintText: 'Nom du médecin',
                 labelStyle: AppDecor.t(13, c: AppColors.textMuted),
                 hintStyle: AppDecor.t(13, c: AppColors.textHint),
                 prefixIcon: const Icon(Icons.search_rounded, size: 23),
                 prefixIconColor: AppColors.primary,
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_query.isNotEmpty)
+                      IconButton(
                         tooltip: 'Effacer la recherche',
                         onPressed: () {
                           _searchController.clear();
@@ -66,6 +93,22 @@ class _DoctorsPageState extends State<DoctorsPage> {
                         },
                         icon: const Icon(Icons.close_rounded, size: 20),
                       ),
+                    IconButton(
+                      tooltip: 'Filtres',
+                      onPressed: _openFilters,
+                      icon: const Icon(Icons.tune_rounded),
+                      style: IconButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        backgroundColor: _specialty == null
+                            ? null
+                            : AppColors.primaryLighter,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 contentPadding: const EdgeInsets.symmetric(
@@ -89,11 +132,21 @@ class _DoctorsPageState extends State<DoctorsPage> {
             ),
           ),
           const SizedBox(height: 20),
+          if (_specialty != null) ...[
+            InputChip(
+              label: Text('Spécialité : $_specialty'),
+              backgroundColor: AppColors.primaryLighter,
+              deleteButtonTooltipMessage: 'Retirer le filtre de spécialité',
+              onDeleted: () => setState(() => _specialty = null),
+            ),
+            const SizedBox(height: 12),
+          ],
           if (doctors.isEmpty)
             const CareEmpty(
               icon: Icons.search_off_rounded,
               title: 'Aucun résultat',
-              description: 'Essayez un autre nom ou une autre spécialité.',
+              description:
+                  'Essayez un autre nom ou modifiez le filtre de spécialité.',
             )
           else
             for (final doctor in doctors) ...[
