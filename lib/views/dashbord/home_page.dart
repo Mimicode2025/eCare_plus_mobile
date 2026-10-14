@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Mes médecins',
-                        style: AppDecor.t(18, w: FontWeight.w700),
+                        style: AppDecor.t(16, w: FontWeight.w700),
                       ),
                     ),
                     TextButton(
@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 SizedBox(
                   height:
                       268 +

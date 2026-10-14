@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage>
                 title: 'Content de vous\nrevoir !',
                 subtitle:
                     'Connectez-vous pour poursuivre votre suivi personnalisé.',
-                height: 310,
+                height: 290,
                 showEcg: false,
               ),
               Center(
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage>
                                 fit: BoxFit.contain,
                                 excludeFromSemantics: true,
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 10),
                               Form(
                                 key: _formKey,
                                 child: Column(
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage>
                                           ? 'Ce champ est obligatoire'
                                           : null,
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 11),
                                     AuthField(
                                       label: 'Mot de passe',
                                       controller: _passwordController,
@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage>
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 3),
                               GradientButton(
                                 text: 'Se connecter',
                                 onPressed: _login,
