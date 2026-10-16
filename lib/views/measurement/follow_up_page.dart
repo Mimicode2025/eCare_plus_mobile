@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../widgets/care_date_time_picker.dart';
 import 'package:provider/provider.dart';
 import '../../models/care_data.dart';
 import '../../utils/app_colors.dart';
@@ -473,7 +474,7 @@ class _MeasurementFormState extends State<_MeasurementForm> {
             title: Text(careDate(_date)),
             trailing: const Icon(Icons.edit_outlined, size: 18),
             onTap: () async {
-              final date = await showDatePicker(
+              final date = await showCareDatePicker(
                 context: context,
                 initialDate: _date,
                 firstDate: DateTime(2000),
@@ -501,7 +502,7 @@ class _MeasurementFormState extends State<_MeasurementForm> {
             title: Text(careTime(_date)),
             trailing: const Icon(Icons.edit_outlined, size: 18),
             onTap: () async {
-              final time = await showTimePicker(
+              final time = await showCareTimePicker(
                 context: context,
                 initialTime: TimeOfDay.fromDateTime(_date),
               );

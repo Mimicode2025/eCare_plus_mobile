@@ -1,5 +1,6 @@
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'care_date_time_picker.dart';
 import '../models/medical_document.dart';
 import '../services/document_library.dart';
 import '../utils/app_colors.dart';
@@ -142,7 +143,7 @@ class _DocumentImportSheetState extends State<DocumentImportSheet> {
                 onPressed: _saving
                     ? null
                     : () async {
-                        final date = await showDatePicker(
+                        final date = await showCareDatePicker(
                           context: context,
                           initialDate: _date,
                           firstDate: DateTime(1900),

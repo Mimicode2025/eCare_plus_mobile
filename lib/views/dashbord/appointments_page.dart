@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/care_date_time_picker.dart';
 import 'package:provider/provider.dart';
 import '../../models/care_data.dart';
 import '../../utils/app_colors.dart';
@@ -219,7 +220,7 @@ class _AppointmentFormState extends State<_AppointmentForm> {
               trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () async {
                 final now = DateTime.now();
-                final picked = await showDatePicker(
+                final picked = await showCareDatePicker(
                   context: context,
                   initialDate: _day ?? now,
                   firstDate: DateTime(now.year, now.month, now.day),
@@ -239,7 +240,7 @@ class _AppointmentFormState extends State<_AppointmentForm> {
               ),
               trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () async {
-                final picked = await showTimePicker(
+                final picked = await showCareTimePicker(
                   context: context,
                   initialTime: _time ?? TimeOfDay.now(),
                 );

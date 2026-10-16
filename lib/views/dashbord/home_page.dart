@@ -74,9 +74,9 @@ class HomePage extends StatelessWidget {
                 const _WelcomeCard(),
                 const SizedBox(height: 24),
                 Text('Accès rapide', style: AppDecor.t(16, w: FontWeight.w700)),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 const _QuickActions(),
-                const SizedBox(height: 26),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 SizedBox(
                   height:
                       268 +

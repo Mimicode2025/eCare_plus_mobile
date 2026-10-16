@@ -28,7 +28,7 @@ void main() {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
     await tester.enterText(
       find.descendant(
-        of: find.byType(DatePickerDialog),
+        of: find.byType(InputDatePickerFormField),
         matching: find.byType(TextFormField),
       ),
       '${tomorrow.month}/${tomorrow.day}/${tomorrow.year}',
